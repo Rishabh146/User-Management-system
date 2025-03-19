@@ -8,52 +8,56 @@ import About from '../pages/About';
 import PageNotFound from '../pages/PageNotFound';
 import Register from '../Auth/Register';
 import Login from '../Auth/Login';
+import { useSelector } from 'react-redux';
+import { RootState } from '../Redux/store';
 // import { useNavigate } from 'react-router-dom';
 
 
-const isAuth = localStorage.getItem("authToken");
-
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-}
-
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  if (!isAuth) {
-    // If not authorized, redirect to the login page
-    return <Navigate to="/login" />;
-  }
-  return <>{children}</>;
-};
-
 const App: React.FC = () => {
+  const token = useSelector((state: RootState) => state.auth.token);
+
+  console.log("Token:",token)
+
+  // ProtectedRoute component logic directly in App.tsx
+  const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    if (!token) {
+      // If not authorized, redirect to the login page
+      return <Navigate to="/login" />;
+    }
+    return <>{children}</>;
+  };
+
   return (
     <>
       <Routes>
-        <Route path="/" element={
+        <Route
+          path="/"
+          element={
             <ProtectedRoute>
-              <Home/>
+              <Home />
             </ProtectedRoute>
-          }  />
-        
+          }
+        />
+
         {/* Protect Contact and About routes */}
-        <Route 
-          path="/contact" 
+        <Route
+          path="/contact"
           element={
             <ProtectedRoute>
               <Contact />
             </ProtectedRoute>
-          } 
+          }
         />
-        
-        <Route 
-          path="/about" 
+
+        <Route
+          path="/about"
           element={
             <ProtectedRoute>
               <About />
             </ProtectedRoute>
-          } 
+          }
         />
-        
+
         <Route path="/*" element={<PageNotFound />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />

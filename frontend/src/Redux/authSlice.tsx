@@ -1,4 +1,4 @@
-
+// redux/slices/authSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface AuthState {
@@ -15,6 +15,7 @@ const authSlice = createSlice({
   reducers: {
     setToken(state, action: PayloadAction<string>) {
       state.token = action.payload;
+      console.log(action.payload, action.type)
     },
     clearToken(state) {
       state.token = null;
@@ -24,3 +25,4 @@ const authSlice = createSlice({
 
 export const { setToken, clearToken } = authSlice.actions;
 export default authSlice.reducer;
+

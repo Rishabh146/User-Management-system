@@ -2,24 +2,28 @@ import { Box, Typography, Button, Link } from '@mui/joy';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaRegUserCircle } from "react-icons/fa";
 import { useState } from 'react';
+// import { clearToken } from 'frontend/src/Redux/authSlice';
+import {clearToken} from '../../Redux/authSlice'
+import { useDispatch, UseDispatch, useSelector } from 'react-redux';
+import { persistor, RootState } from '../../Redux/store';
+import { UseSelector } from 'react-redux';
+
 
 function Header() {
-    // Set the initial auth state based on the presence of authToken in localStorage
-    const [isAuth, setIsAuth] = useState<boolean>(!!localStorage.getItem("authToken"));
-
+    const token = useSelector((state: RootState) => state.auth.token);
+    const dispatch=useDispatch();
     const navigate = useNavigate();
 
-    // Handle logout functionality
     const handleLogout = () => {
-        // Remove the authToken from localStorage
-        localStorage.removeItem("authToken");
-
-        // Update the auth state
-        setIsAuth(false);
-
-        // Redirect the user to the login page
-        navigate("/login");
-    };
+        // Clear token from Redux
+        dispatch(clearToken());
+    
+        // Clear persisted Redux store
+        persistor.purge();
+    
+        // Navigate to login page
+        navigate('/login');
+      };
 
     return (
         <Box
@@ -43,7 +47,7 @@ function Header() {
 
             {/* Navigation Links */}
             {
-                isAuth ? 
+                token ? 
                 <Box sx={{ display: 'flex', gap: 5 }}>
                     <Link
                         component={NavLink}

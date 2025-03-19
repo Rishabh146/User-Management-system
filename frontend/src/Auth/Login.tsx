@@ -14,6 +14,8 @@ import { Typography } from '@mui/joy';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../Redux/authSlice';
 
 const theme = extendTheme({
     components: {
@@ -31,92 +33,91 @@ const sty = {
     borderLeft: 'none',
     borderRight: 'none',
     borderTop: 'none',
-};
-
-function Login() {
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState("");
+  };
+  
+  function Login() {
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
+  
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        try {
-            const res = await axios.post('http://localhost:8080/api/v1/auth/login', {
-                email,
-                password,
-            });
-
-            if (res.data.success) {
-                console.log("User has been logged in successfully");
-                console.log("Token value is:", res.data.token);
-                
-                // Save token in localStorage
-                localStorage.setItem("authToken", res.data.token);
-                
-                // Redirect to Home
-                navigate('/');
-            } else {
-                console.error(res.data.message || 'Login failed');
-            }
-        } catch (error: any) {
-            console.error('Login error:', error.response?.data?.message || 'Something went wrong');
+      e.preventDefault();
+  
+      try {
+        const res = await axios.post('http://localhost:8080/api/v1/auth/login', {
+          email,
+          password,
+        });
+  
+        if (res.data.success) {
+          console.log('User has been logged in successfully');
+          console.log('Token value is:', res.data.token);
+  
+          // Save token in Redux store
+          dispatch(setToken(res.data.token));
+  
+          // Redirect to Home page
+          navigate('/');
+        } else {
+          console.error(res.data.message || 'Login failed');
         }
+      } catch (error: any) {
+        console.error('Login error:', error.response?.data?.message || 'Something went wrong');
+      }
     };
-
+  
     return (
-        <Layout tittle={'Login'}>
-            <div>
-                <Typography sx={{ textAlign: 'center', m: 2 }}></Typography>
-                <form onSubmit={handleSubmit}>
-                    <Box
-                        sx={{
-                            maxHeight: 500,
-                            maxWidth: 400,
-                            ml: 80,
-                            mt: 10,
-                            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.3)',
-                            borderRadius: 4
-                        }}
-                    >
-                        <Typography sx={{ textAlign: 'center', pt: 3 }}>
-                            <h1>Login Here</h1>
-                        </Typography>
-                        <FormControl>
-                            <Input
-                                placeholder="Email"
-                                sx={sty}
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </FormControl>
-                        <FormControl>
-                            <Input
-                                placeholder="Password"
-                                sx={sty}
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </FormControl>
-
-                        <Button size="lg" type='submit' sx={{ textAlign: 'center', px: 20, m: 2 }}>Login</Button>
-                        <Typography sx={{ textAlign: 'center', m: 1, p: 1 }}>
-                            <p>Don't Have Account?
-                                <Link
-                                    component={NavLink}
-                                    to="/register"
-                                    underline="none"
-                                    sx={{ color: '#0000FF', p: 1 }}
-                                >
-                                    Register
-                                </Link>
-                            </p>
-                        </Typography>
-                    </Box>
-                </form>
-            </div>
-        </Layout>
+      <Layout tittle={'Login'}>
+        <div>
+          <Typography sx={{ textAlign: 'center', m: 2 }}></Typography>
+          <form onSubmit={handleSubmit}>
+            <Box
+              sx={{
+                maxHeight: 500,
+                maxWidth: 400,
+                ml: 80,
+                mt: 10,
+                boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.3)',
+                borderRadius: 4,
+              }}
+            >
+              <Typography sx={{ textAlign: 'center', pt: 3 }}>
+                <h1>Login Here</h1>
+              </Typography>
+              <FormControl>
+                <Input
+                  placeholder="Email"
+                  sx={sty}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </FormControl>
+              <FormControl>
+                <Input
+                  placeholder="Password"
+                  sx={sty}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </FormControl>
+  
+              <Button size="lg" type="submit" sx={{ textAlign: 'center', px: 20, m: 2 }}>
+                Login
+              </Button>
+              <Typography sx={{ textAlign: 'center', m: 1, p: 1 }}>
+                <p>
+                  Don't Have an Account?
+                  <Link component={NavLink} to="/register" underline="none" sx={{ color: '#0000FF', p: 1 }}>
+                    Register
+                  </Link>
+                </p>
+              </Typography>
+            </Box>
+          </form>
+        </div>
+      </Layout>
     );
-}
-
-export default Login;
+  }
+  
+  export default Login;
