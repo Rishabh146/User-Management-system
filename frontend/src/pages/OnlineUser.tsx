@@ -1,36 +1,53 @@
-// // src/components/OnlineUsers.tsx
-// import { useEffect, useState } from 'react';
-// import { io } from 'socket.io-client';
+import { useEffect, useState } from 'react';
+import io from 'socket.io-client';
 
-// const socket = io('http://localhost:8080'); // Backend URL
+const socket = io('http://localhost:8080'); // Your backend server URL
+
+interface User {
+  id: string;
+  username: string;
+}
 
 const OnlineUsers = () => {
-//   const [users, setUsers] = useState<string[]>([]);
+  const [username, setUsername] = useState('');
+  const [onlineUsers, setOnlineUsers] = useState<User[]>([]); // Track online users
 
-//   useEffect(() => {
-//     const username = prompt("Enter your username") || "Anonymous";
-//     socket.emit('join', username);
+  useEffect(() => {
+    // Check if the username exists before emitting
+    if (username) {
+      socket.emit('user_connected', username); // Notify backend about the user's connection
+    }
 
-//     socket.on('updateUserList', (onlineUsers: string[]) => {
-//       setUsers(onlineUsers);
-//     });
+    // Listen for online users data from the server
+    socket.on('online_users', (users: User[]) => {
+      console.log('Received online users:', users); // Log the received data to check if it's correct
+      setOnlineUsers(users); // Update state with the received users
+    });
 
-//     return () => {
-//       socket.disconnect();
-//     };
-//   }, []);
+    // Cleanup the socket connection when the component unmounts
+    return () => {
+      socket.disconnect();
+    };
+  }, [username]);
 
   return (
     <div>
-      {/* <h2>Online Users:</h2>
+      <h3>Online Users:</h3>
       <ul>
-        {users.map((user, idx) => (
-          <li key={idx}>{user}</li>
-        ))}
-      </ul> */}
-      <h1>hi divyanshu</h1>
+        {onlineUsers.length > 0 ? (
+          onlineUsers.map(user => (
+            <li key={user.id}>{user.username}</li>
+          ))
+        ) : (
+          <li>No users online</li>
+        )}
+      </ul>
     </div>
   );
 };
 
 export default OnlineUsers;
+
+
+
+

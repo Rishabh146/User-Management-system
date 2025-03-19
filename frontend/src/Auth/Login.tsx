@@ -1,5 +1,4 @@
-
-
+// Login.tsx
 import Button from '@mui/joy/Button';
 import { Button as JoyButton } from '@mui/joy';
 import Grid from '@mui/joy/Grid';
@@ -13,9 +12,8 @@ import Layout from '../components/Layout/Layout';
 import Link from '@mui/joy/Link';
 import { Typography } from '@mui/joy';
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const theme = extendTheme({
     components: {
@@ -26,49 +24,50 @@ const theme = extendTheme({
         },
     },
 });
+
 const sty = {
     m: 3,
     p: 1,
     borderLeft: 'none',
     borderRight: 'none',
     borderTop: 'none',
+};
 
-}
 function Login() {
-
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const navigate=useNavigate();
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-    
+
         try {
-          const res = await axios.post('http://localhost:8080/api/v1/auth/login', {
-            email,
-            password,
-          });
-    
-          if (res.data.success) {
-            console.log("user has been login succesfully");
-            navigate('/'); 
-          } else {
-            // toast.error(res.data.message || 'Login failed');
-          }
+            const res = await axios.post('http://localhost:8080/api/v1/auth/login', {
+                email,
+                password,
+            });
+
+            if (res.data.success) {
+                console.log("User has been logged in successfully");
+                console.log("Token value is:", res.data.token);
+                
+                // Save token in localStorage
+                localStorage.setItem("authToken", res.data.token);
+                
+                // Redirect to Home
+                navigate('/');
+            } else {
+                console.error(res.data.message || 'Login failed');
+            }
         } catch (error: any) {
-        //   toast.error(error.response?.data?.message || 'Something went wrong');
-          console.error('Login error:', error);
+            console.error('Login error:', error.response?.data?.message || 'Something went wrong');
         }
-      };
+    };
 
     return (
         <Layout tittle={'Login'}>
             <div>
-
-                <Typography sx={{ textAlign: 'center', m: 2 }}>
-                </Typography>
-
-
+                <Typography sx={{ textAlign: 'center', m: 2 }}></Typography>
                 <form onSubmit={handleSubmit}>
                     <Box
                         sx={{
@@ -84,13 +83,17 @@ function Login() {
                             <h1>Login Here</h1>
                         </Typography>
                         <FormControl>
-                            <Input placeholder="Email" sx={sty}
+                            <Input
+                                placeholder="Email"
+                                sx={sty}
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                         </FormControl>
                         <FormControl>
-                            <Input placeholder="Password" sx={sty}
+                            <Input
+                                placeholder="Password"
+                                sx={sty}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
@@ -103,20 +106,17 @@ function Login() {
                                     component={NavLink}
                                     to="/register"
                                     underline="none"
-                                    sx={{ color: '#0000FF', p:1}}
+                                    sx={{ color: '#0000FF', p: 1 }}
                                 >
                                     Register
                                 </Link>
                             </p>
                         </Typography>
-
                     </Box>
                 </form>
-
-
             </div>
         </Layout>
     );
 }
 
-export default Login
+export default Login;

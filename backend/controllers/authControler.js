@@ -68,7 +68,7 @@ export const loginController=async(req,res)=>{
                 message:"invalid Login Credential"
             })
         }
-        const token=await JWT.sign({_id:user._id}, process.env.JWT_SECRET ,{expiresIn:'7d'})
+        const token=await JWT.sign({_id:user._id}, 'JHDHKSDJJNjjndndsj97373' ,{expiresIn:'7d'})
         res.status(201).send({
             success:true,
             message:"USer Login Successfully",
