@@ -10,7 +10,6 @@ import Register from '../Auth/Register';
 import Login from '../Auth/Login';
 import { useSelector } from 'react-redux';
 import { RootState } from '../Redux/store';
-import PostList from '../pages/PostList';
 // import { useNavigate } from 'react-router-dom';
 
 
@@ -34,9 +33,7 @@ const App: React.FC = () => {
         <Route
           path="/"
           element={
-            <ProtectedRoute>
               <Home />
-            </ProtectedRoute>
           }
         />
 
@@ -49,15 +46,6 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/post"
-          element={
-            <ProtectedRoute>
-              <PostList/>
-            </ProtectedRoute>
-          }
-        />
-
         <Route
           path="/about"
           element={

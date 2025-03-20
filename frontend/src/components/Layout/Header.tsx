@@ -22,7 +22,7 @@ function Header() {
         persistor.purge();
     
         // Navigate to login page
-        navigate('/login');
+        navigate('/');
       };
 
     return (

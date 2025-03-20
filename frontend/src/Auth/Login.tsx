@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { setToken } from '../Redux/authSlice';
+import { setToken, setUser } from '../Redux/authSlice';
 
 const theme = extendTheme({
     components: {
@@ -53,10 +53,12 @@ const sty = {
         if (res.data.success) {
           console.log('User has been logged in successfully');
           console.log('Token value is:', res.data.token);
+          console.log("information stored in the login", res.data)
   
           // Save token in Redux store
-          dispatch(setToken(res.data.token));
-  
+          const { token, user } = res.data; 
+          dispatch(setToken(token));
+          dispatch(setUser(user))
           // Redirect to Home page
           navigate('/');
         } else {
