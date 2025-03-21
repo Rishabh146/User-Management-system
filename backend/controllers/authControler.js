@@ -91,6 +91,43 @@ export const loginController=async(req,res)=>{
     }
   }
 
+  export const updateControler = async (req, res) => {
+    try {
+      if (!req.user || !req.user._id) {
+        return res.status(401).send({
+          success: false,
+          message: "Unauthorized: User not authenticated",
+        });
+      }
+  
+      const { name, email, age, gender } = req.body;
+      const user = await userModels.findById(req.user._id);
+      const updatedUser = await userModels.findByIdAndUpdate(
+        req.user._id,
+        {
+          name: name || user.name,
+          email: email || user.email,
+          gender: gender || user.gender,
+          age: age !== undefined ? age : user.age,
+        },
+        { new: true }
+      );
+      res.status(200).send({
+        success: true,
+        message: "Profile Updated Successfully",
+        updatedUser,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(400).send({
+        success: false,
+        message: "Error While Updating Profile",
+        error,
+      });
+    }
+  };
+  
+
   export const getAllUsersController = async (req, res) => {
     try {
       const users = await userModels.find({}, '-password'); // exclude password for security

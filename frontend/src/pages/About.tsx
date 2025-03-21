@@ -2,7 +2,7 @@ import React from 'react'
 import Layout from '../components/Layout/Layout'
 import { useSelector } from 'react-redux';
 import { RootState } from '../Redux/store';
-import { Typography, Card, CardContent, Box, Avatar, Divider, Sheet } from '@mui/joy'
+import { Typography, Card, CardContent, Box, Avatar, Divider, Sheet, Button } from '@mui/joy'
 
 function About() {
   const { user, token } = useSelector((state: RootState) => state.auth);
@@ -23,7 +23,9 @@ function About() {
               <Typography level="h3" mt={1}>
                 User Profile
               </Typography>
+              {/* <Button variant="solid" sx={{display:'flex'}}>Edit</Button> */}
             </Box>
+            
 
             <Divider />
 
