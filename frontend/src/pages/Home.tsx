@@ -22,35 +22,35 @@ function Home() {
   if (users.length === 0) return <Alert>No users available.</Alert>;
 
   return (
-    <Layout tittle={'UserManagement'}>
-      <h1>Hello, welcome to Home!</h1>
-      {token ? (
-        <div>
-         <Table aria-label="table sizes">
+    <Layout tittle={'Home'}>
+  <h1>Hello, welcome to Home!</h1>
+  {token ? (
+    <div>
+      <Table aria-label="table sizes">
         <thead>
           <tr>
+            <th>Serial No.</th> {/* Add Serial No. column */}
             <th>Name</th>
             <th>Email</th>
-            <th>Gender</th>
-            <th>Age</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
-          {users.map((row) => (
-            <tr>
+          {users.map((row, index) => (
+            <tr key={row.id}> {/* Add a unique key for each row */}
+              <td>{index + 1}</td> {/* Display serial number */}
               <td>{row.name}</td>
               <td>{row.email}</td>
-              <td>{row.gender}</td>
-              <td>{row.age}</td>
+            
             </tr>
           ))}
         </tbody>
       </Table>
-        </div>
-      ) : (
-      <h3>Please Login to See the User's</h3>
-      )}
-    </Layout>
+    </div>
+  ) : (
+    <h3>Please Login to See the User's</h3>
+  )}
+</Layout>
   );
 }
 

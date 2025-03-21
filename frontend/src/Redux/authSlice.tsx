@@ -36,10 +36,15 @@ const authSlice = createSlice({
       state.user = action.payload;
       console.log('User set:', action.payload);
     },
+    updateProfile(state, action: PayloadAction<User>) {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+      }
+    },
   },
 });
 
-export const { setToken, clearToken, setUser } = authSlice.actions;
+export const { setToken, clearToken, setUser,updateProfile } = authSlice.actions;
 export default authSlice.reducer;
 
 

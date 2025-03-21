@@ -10,7 +10,9 @@ dotenv.config();
 connectDb();
 app.use(express.json());
 app.use(morgan('dev'))
-app.use(cors());
+app.use(cors({
+    allowedHeaders: ['Authorization', 'Content-Type'], // Allow Authorization header
+  }));
 
 app.use("/api/v1/auth",authRoutes)
 const PORT=8080

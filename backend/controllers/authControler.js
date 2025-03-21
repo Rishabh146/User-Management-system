@@ -92,6 +92,11 @@ export const loginController=async(req,res)=>{
   }
 
   export const updateControler = async (req, res) => {
+
+    const token = req.headers.authorization?.split(" ")[1]; // Get the token from 'Bearer <token>'
+
+    // Log the token to the console (for debugging purposes)
+    console.log("Token **********************:", token);
     try {
       if (!req.user || !req.user._id) {
         return res.status(401).send({
