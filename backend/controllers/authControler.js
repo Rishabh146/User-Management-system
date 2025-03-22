@@ -76,7 +76,8 @@ export const loginController=async(req,res)=>{
                 name:user.name,
                 email:user.email,
                 gender:user.gender,
-                age:user.age
+                age:user.age,
+                id:user._id
             },
             token
         })
@@ -136,9 +137,6 @@ export const loginController=async(req,res)=>{
   export const getAllUsersController = async (req, res) => {
     try {
       const users = await userModels.find({}, '-password'); // exclude password for security
-  
-      console.log("Fetched Users:", users); 
-  
       res.status(200).send({
         success: true,
         message: "Fetched all users successfully",
