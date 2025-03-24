@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../Redux/store';
 import { fetchPosts } from '../Redux/postSlice';
 import CircularProgress from '@mui/joy/CircularProgress';
-import { Alert, Table } from '@mui/joy';
+import { Alert, Box, Table } from '@mui/joy';
 import io, { Socket } from 'socket.io-client';
+import Badge from '@mui/joy/Badge';
+import Chip from '@mui/joy/Chip';
 
 const socket: Socket = io('http://localhost:8080', {
   transports: ['websocket'],
@@ -30,9 +32,13 @@ function Home() {
       console.log("The value of the userId is:", userId)
       if (userId) {
         socket.emit('userStatus', { userId: userId, status: 'online' });
-     
+
       }
-    });
+    }
+
+
+
+    );
 
     socket.on('connect_error', (err) => {
       console.error('Socket.IO connection error:', err.message);
@@ -44,7 +50,19 @@ function Home() {
         [data.userId]: data.status,
       }));
     });
-    
+
+    socket.on('initialOnlineUsers', (onlineUserIds: string[]) => {
+      const updatedStatus: { [key: string]: string } = {};
+      onlineUserIds.forEach(userId => {
+        updatedStatus[userId] = 'online';
+      });
+      setUserStatus((prevState) => ({
+        ...prevState,
+        ...updatedStatus,
+      }));
+    });
+
+
 
     return () => {
       if (userId) {
@@ -53,22 +71,24 @@ function Home() {
       socket.off('statusUpdate');
       socket.off('connect');
       socket.off('connect_error');
+      socket.off('initialOnlineUsers');
+
     };
   }, [dispatch, userId]);
 
   if (loading) return <CircularProgress color="primary" />;
   if (error) return <Alert color="danger">{error}</Alert>;
   if (users.length === 0) return <Alert>No users available.</Alert>;
-  
-  console.log("userStatus is:",userStatus)
-  console.log("the value of the users is:",users)
+
+  console.log("userStatus is:", userStatus)
+  console.log("the value of the users is:", users)
 
   users.map((row, index) => {
     const statusValue = userStatus[row._id];
     console.log(`Status for user ID ${row._id}:`, statusValue);
-  
+
   });
-  
+
 
   return (
     <Layout tittle={'Home'}>
@@ -90,7 +110,14 @@ function Home() {
                   <td>{index + 1}</td>
                   <td>{row.name}</td>
                   <td>{row.email}</td>
-                  <td>{userStatus[row._id] === 'online' ? 'Online' : 'Offline'}</td>
+                  <td>
+
+
+                    {userStatus[row._id] === 'online' ? <Chip color='primary' variant="solid" size='md'>Online</Chip> : <Chip color='neutral' variant="solid" size='md'>Offline</Chip>}
+
+                  </td>
+
+
                 </tr>
               ))}
             </tbody>
