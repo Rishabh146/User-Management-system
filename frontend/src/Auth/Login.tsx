@@ -16,16 +16,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setToken, setUser } from '../Redux/authSlice';
-
-const theme = extendTheme({
-    components: {
-        JoySkeleton: {
-            defaultProps: {
-                animation: 'wave',
-            },
-        },
-    },
-});
+import {toast} from 'react-hot-toast'
 
 const sty = {
     m: 3,
@@ -51,17 +42,14 @@ const sty = {
         });
   
         if (res.data.success) {
-          console.log('User has been logged in successfully');
-          console.log('Token value is:', res.data.token);
-          console.log("information stored in the login", res.data)
-  
-          // Save token in Redux store
+   
           const { token, user } = res.data; 
           dispatch(setToken(token));
           dispatch(setUser(user))
-          // Redirect to Home page
+          toast.success("User Login Successfully")
           navigate('/');
         } else {
+          toast.error("Something Went Wrong")
           console.error(res.data.message || 'Login failed');
         }
       } catch (error: any) {

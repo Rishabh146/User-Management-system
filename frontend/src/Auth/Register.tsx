@@ -10,7 +10,7 @@ import Link from '@mui/joy/Link';
 import { Typography } from '@mui/joy';
 import Layout from '../components/Layout/Layout';
 import { FormEvent, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import {toast} from 'react-hot-toast'
 import { NavLink } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
@@ -53,9 +53,11 @@ function Register() {
                 toast.success("User Registered Successfully");
                 navigate("/login");
             } else {
+                toast.error("Registration Failed")
                 toast.error(res.data.message || "Registration failed");
             }
         } catch (error: any) {
+            toast.error("Something Went Wrong")
             toast.error(error.response?.data?.message || "Something went wrong");
             console.error(error);
         }

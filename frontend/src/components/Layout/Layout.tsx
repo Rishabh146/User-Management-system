@@ -2,20 +2,22 @@ import { ReactNode } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import { Box } from '@mui/joy';
-// import { Helmet } from "react-helmet";
-import Helmet from 'react-helmet'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'
-
+import { Helmet } from "react-helmet";
+import { Toaster } from 'react-hot-toast';
 type LayoutProps = {
   children: ReactNode;
-  tittle:ReactNode;
+  tittle: ReactNode;
 };
 
 function Layout({ children, tittle }: LayoutProps) {
   return (
     <>
-    <ToastContainer />
+      <Toaster position="top-center" containerStyle={{
+        top: 20,
+        left: 20,
+        bottom: 20,
+        right: 20,
+      }} />
       <Helmet>
         <meta charSet="utf-8" />
         <title>{tittle}</title>

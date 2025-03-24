@@ -7,6 +7,7 @@ import {clearToken} from '../../Redux/authSlice'
 import { useDispatch, UseDispatch, useSelector } from 'react-redux';
 import { persistor, RootState } from '../../Redux/store';
 import { UseSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 
 
 function Header() {
@@ -20,7 +21,7 @@ function Header() {
     
         // Clear persisted Redux store
         persistor.purge();
-    
+        toast.success("User Logout Successfully")
         // Navigate to login page
         navigate('/');
       };
