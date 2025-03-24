@@ -6,9 +6,9 @@ import morgan from 'morgan';
 import cors from 'cors';
 import http from 'http';  
 import { Server } from 'socket.io'; 
-
-const app = express();
 dotenv.config();
+const app = express();
+
 
 connectDb();
 app.use(express.json());
@@ -28,28 +28,20 @@ const io = new Server(server, {
   },
 });
 
-let userSockets = {};  // userId => socketId[]
-let onlineUsers = new Set();  // Track currently online users
+let userSockets = {}; 
+let onlineUsers = new Set();  
 
 io.on('connection', (socket) => {
-  console.log('A user connected:', socket.id);
-
   socket.on('userStatus', (data) => {
     const { userId, status } = data;
-    console.log(`User ${userId} is ${status}`);
 
     if (status === 'online') {
-      // Track socket
       if (!userSockets[userId]) {
         userSockets[userId] = [];
       }
       userSockets[userId].push(socket.id);
-      onlineUsers.add(userId);  // Add to online users
-
-      // 1. Notify all clients that THIS user is online
+      onlineUsers.add(userId); 
       io.emit('statusUpdate', { userId, status });
-
-      // 2. Notify THIS user of all other online users
       const otherOnlineUsers = Array.from(onlineUsers).filter(id => id !== userId);
       socket.emit('initialOnlineUsers', otherOnlineUsers);
     }
@@ -65,32 +57,16 @@ io.on('connection', (socket) => {
     }
 
     if (userId) {
-      console.log(`User ${userId} disconnected`);
       userSockets[userId] = userSockets[userId].filter(id => id !== socket.id);
       if (userSockets[userId].length === 0) {
         delete userSockets[userId];
-        onlineUsers.delete(userId);  // Remove from online users
-
-        // Notify all clients that user is offline
+        onlineUsers.delete(userId);  
         io.emit('statusUpdate', { userId, status: 'offline' });
       }
     }
   });
 });
-
-
-// Utility: Create a unique room ID for two users (sorted to avoid duplicates)
-const getRoomId = (id1, id2) => {
-  const sorted = [id1, id2].sort();
-  return `room_${sorted[0]}_${sorted[1]}`;
-};
-
-// API routes
 app.use('/api/v1/auth', authRoutes);
-
-app.get('/', (req, res) => {
-  res.send('<h1>App is running</h1>'); 
-});
 
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {

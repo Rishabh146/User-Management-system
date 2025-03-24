@@ -3,6 +3,8 @@ import axios from 'axios';
 
 // Define the interface for a user with new fields
 interface User {
+  _id: any;
+  status: any;
   id: number;
   name: string;
   email: string;

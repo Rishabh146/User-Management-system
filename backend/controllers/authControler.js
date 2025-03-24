@@ -25,8 +25,6 @@ export const registerController=async(req,res)=> {
 
         const hashedPassword= await hashPassword(password)
         const user= await new userModels({name, email, age, gender, password:hashedPassword}).save();
-        console.log("user",user);
-        
         res.status(200).send({
             success:true,
             message:"User Register Sucessfully",
@@ -34,7 +32,6 @@ export const registerController=async(req,res)=> {
         })
         
     } catch (error) {
-        console.log("error in the Registration",error);
         res.status(500).send({
             sucess:false,
             message:"error in the registration",
@@ -68,7 +65,7 @@ export const loginController=async(req,res)=>{
                 message:"invalid Login Credential"
             })
         }
-        const token=await JWT.sign({_id:user._id}, 'JHDHKSDJJNjjndndsj97373' ,{expiresIn:'7d'})
+        const token=await JWT.sign({_id:user._id}, process.env.JWT_SECRET ,{expiresIn:'7d'})
         res.status(201).send({
             success:true,
             message:"USer Login Successfully",
@@ -83,7 +80,6 @@ export const loginController=async(req,res)=>{
         })
 
     } catch (error) {
-        console.log("error in login",error)
         res.status(500).send({
             success:false,
             message:"error in login",
@@ -93,11 +89,8 @@ export const loginController=async(req,res)=>{
   }
 
   export const updateControler = async (req, res) => {
+    const token = req.headers.authorization?.split(" ")[1];
 
-    const token = req.headers.authorization?.split(" ")[1]; // Get the token from 'Bearer <token>'
-
-    // Log the token to the console (for debugging purposes)
-    console.log("Token **********************:", token);
     try {
       if (!req.user || !req.user._id) {
         return res.status(401).send({
@@ -124,7 +117,6 @@ export const loginController=async(req,res)=>{
         updatedUser,
       });
     } catch (error) {
-      console.log(error);
       res.status(400).send({
         success: false,
         message: "Error While Updating Profile",
@@ -136,14 +128,13 @@ export const loginController=async(req,res)=>{
 
   export const getAllUsersController = async (req, res) => {
     try {
-      const users = await userModels.find({}, '-password'); // exclude password for security
+      const users = await userModels.find({}, '-password');
       res.status(200).send({
         success: true,
         message: "Fetched all users successfully",
         users,
       });
     } catch (error) {
-      console.log("Error fetching users", error);
       res.status(500).send({
         success: false,
         message: "Error fetching users",
