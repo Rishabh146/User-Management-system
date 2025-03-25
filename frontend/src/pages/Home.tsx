@@ -7,7 +7,6 @@ import { fetchPosts } from '../Redux/postSlice';
 import CircularProgress from '@mui/joy/CircularProgress';
 import { Alert, Box, Table } from '@mui/joy';
 import io, { Socket } from 'socket.io-client';
-import Badge from '@mui/joy/Badge';
 import Chip from '@mui/joy/Chip';
 
 const socket: Socket = io('http://localhost:8080', {
@@ -16,7 +15,7 @@ const socket: Socket = io('http://localhost:8080', {
 
 function Home() {
   const token = useSelector((state: RootState) => state.auth.token);
-  const userId = useSelector((state: RootState) => state.auth.user?.id);  // Get user ID from auth state
+  const userId = useSelector((state: RootState) => state.auth.user?.id); 
   const dispatch = useDispatch<AppDispatch>();
   const { users, loading, error } = useSelector((state: RootState) => state.posts);
 
@@ -26,18 +25,11 @@ function Home() {
     dispatch(fetchPosts());
 
     socket.on('connect', () => {
-      console.log('Connected to server with ID:', socket.id);
-
-      // Emit user status with userId
-      console.log("The value of the userId is:", userId)
       if (userId) {
         socket.emit('userStatus', { userId: userId, status: 'online' });
 
       }
     }
-
-
-
     );
 
     socket.on('connect_error', (err) => {
@@ -61,9 +53,6 @@ function Home() {
         ...updatedStatus,
       }));
     });
-
-
-
     return () => {
       if (userId) {
         socket.emit('userStatus', { userId: userId, status: 'offline' });
@@ -80,12 +69,8 @@ function Home() {
   if (error) return <Alert color="danger">{error}</Alert>;
   if (users.length === 0) return <Alert>No users available.</Alert>;
 
-  console.log("userStatus is:", userStatus)
-  console.log("the value of the users is:", users)
-
   users.map((row, index) => {
     const statusValue = userStatus[row._id];
-    console.log(`Status for user ID ${row._id}:`, statusValue);
 
   });
 
