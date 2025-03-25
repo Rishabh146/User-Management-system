@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
 import Header from './Header';
-import Footer from './Footer';
 import { Box } from '@mui/joy';
 import { Helmet } from "react-helmet";
 import { Toaster } from 'react-hot-toast';
@@ -26,8 +25,6 @@ function Layout({ children, tittle }: LayoutProps) {
       <Box component="main" sx={{ minHeight: '76vh' }}>
         {children}
       </Box>
-
-      <Footer />
     </>
   );
 }

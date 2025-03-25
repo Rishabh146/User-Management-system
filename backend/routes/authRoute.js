@@ -10,4 +10,4 @@ router.get("/all-users",getAllUsersController)
 router.get("/test",requireSignIn, isAdmin, testMiddleware)
 router.put("/update-profile", requireSignIn, updateControler)
 
-export default router;
+export default router; 

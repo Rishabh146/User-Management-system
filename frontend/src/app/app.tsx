@@ -1,7 +1,6 @@
 
 import {Route, Routes } from 'react-router-dom';
 import Home from '../pages/Home';
-import Contact from '../pages/Contact';
 import About from '../pages/About';
 import PageNotFound from '../pages/PageNotFound';
 import Register from '../Auth/Register';
@@ -14,15 +13,9 @@ const App: React.FC = () => {
       <Routes>
         <Route
           path="/"
-          element={<Home />}
-        />
-        <Route
-          path="/contact"
-          element={
-            <ProtectRoutes>
-              <Contact />
-            </ProtectRoutes>
-          }
+          element={<ProtectRoutes>
+            <Home/>
+          </ProtectRoutes>}
         />
         <Route
           path="/about"

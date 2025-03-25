@@ -66,14 +66,6 @@ function Header() {
                     >
                         About
                     </Link>
-                    <Link
-                        component={NavLink}
-                        to="/contact"
-                        underline="none"
-                        sx={{ color: '#000000' }}
-                    >
-                        Contact
-                    </Link>
                     <Button
                         onClick={handleLogout}
                         sx={{
