@@ -1,4 +1,3 @@
-// redux/slices/authSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface User {
@@ -25,16 +24,13 @@ const authSlice = createSlice({
   reducers: {
     setToken(state, action: PayloadAction<string>) {
       state.token = action.payload;
-      console.log('Token set:', action.payload);
     },
     clearToken(state) {
       state.token = null;
-      state.user = null; // Clear user info as well on logout
-      console.log('Token and user cleared');
+      state.user = null; 
     },
     setUser(state, action: PayloadAction<User>) {
       state.user = action.payload;
-      console.log('User set:', action.payload);
     },
     updateProfile(state, action: PayloadAction<User>) {
       if (state.user) {
