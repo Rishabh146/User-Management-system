@@ -4,10 +4,11 @@ import { FaRegUserCircle } from "react-icons/fa";
 import {  useSelector } from 'react-redux';
 import { RootState } from '../../Redux/store';
 import LogoutButton from '../../pages/LogOut';
+import { authSelectors } from '../../Redux/authSlice';
 
 
 function Header() {
-    const token = useSelector((state: RootState) => state.auth.token);
+   const token = useSelector((state: RootState) => authSelectors.selectToken(state));
     return (
         <Box
             sx={{

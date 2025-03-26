@@ -43,4 +43,12 @@ const authSlice = createSlice({
 export const { setToken, clearToken, setUser,updateProfile } = authSlice.actions;
 export default authSlice.reducer;
 
+export const authSelectors = {
+  selectToken: (state: { auth: AuthState }) => state.auth.token,
+  selectUser: (state: { auth: AuthState }) => state.auth.user,
+  selectUserId: (state: { auth: AuthState }) => state.auth.user?.id,
+  selectUserEmail: (state: { auth: AuthState }) => state.auth.user?.email,
+  selectAuth: (state: { auth: AuthState }) => ({ token: state.auth.token, user: state.auth.user })
+};
+
 

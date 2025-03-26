@@ -44,6 +44,11 @@ const usersSlice = createSlice({
       });
   },
 });
+export const usersSelectors = {
+  selectUsers: (state: { posts: PostState }) => state.posts.users,
+  selectLoading: (state: { posts: PostState }) => state.posts.loading,
+  selectError: (state: { posts: PostState }) => state.posts.error,
+};
 
 export default usersSlice.reducer;
 
