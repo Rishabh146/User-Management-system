@@ -20,30 +20,30 @@ const initialState: PostState = {
   loading: false,
   error: null,
 };
-export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
+export const fetchUsers = createAsyncThunk('posts/fetchUsers', async () => {
   const response = await axios.get('http://localhost:8080/api/v1/auth/all-users'); 
   return response.data.users; 
 });
 
-const postSlice = createSlice({
+const usersSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchPosts.pending, (state) => {
+      .addCase(fetchUsers.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchPosts.fulfilled, (state, action) => {
+      .addCase(fetchUsers.fulfilled, (state, action) => {
         state.loading = false;
         state.users = action.payload;
       })
-      .addCase(fetchPosts.rejected, (state, action) => {
+      .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch posts';
       });
   },
 });
 
-export default postSlice.reducer;
+export default usersSlice.reducer;
 

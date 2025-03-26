@@ -1,24 +1,13 @@
 import { Box, Typography, Button, Link } from '@mui/joy';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaRegUserCircle } from "react-icons/fa";
-import {clearToken} from '../../Redux/authSlice'
-import { useDispatch, UseDispatch, useSelector } from 'react-redux';
-import { persistor, RootState } from '../../Redux/store';
-import toast from 'react-hot-toast';
+import {  useSelector } from 'react-redux';
+import { RootState } from '../../Redux/store';
+import LogoutButton from '../../pages/LogOut';
 
 
 function Header() {
     const token = useSelector((state: RootState) => state.auth.token);
-    const dispatch=useDispatch();
-    const navigate = useNavigate();
-
-    const handleLogout = () => {
-        dispatch(clearToken());
-        persistor.purge();
-        toast.success("User Logout Successfully")
-        navigate('/');
-      };
-
     return (
         <Box
             sx={{
@@ -56,18 +45,7 @@ function Header() {
                     >
                         About
                     </Link>
-                    <Button
-                        onClick={handleLogout}
-                        sx={{
-                            color: 'white',
-                            backgroundColor: '#FF6347',
-                            '&:hover': {
-                                backgroundColor: '#FF4500'
-                            }
-                        }}
-                    >
-                        Logout
-                    </Button>
+                    <LogoutButton/>
                 </Box>
                 : 
                 <Box sx={{ display: 'flex', gap: 1 }}>
