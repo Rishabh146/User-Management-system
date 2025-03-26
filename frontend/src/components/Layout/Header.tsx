@@ -1,12 +1,9 @@
 import { Box, Typography, Button, Link } from '@mui/joy';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaRegUserCircle } from "react-icons/fa";
-import { useState } from 'react';
-// import { clearToken } from 'frontend/src/Redux/authSlice';
 import {clearToken} from '../../Redux/authSlice'
 import { useDispatch, UseDispatch, useSelector } from 'react-redux';
 import { persistor, RootState } from '../../Redux/store';
-import { UseSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 
 
@@ -16,13 +13,9 @@ function Header() {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        // Clear token from Redux
         dispatch(clearToken());
-    
-        // Clear persisted Redux store
         persistor.purge();
         toast.success("User Logout Successfully")
-        // Navigate to login page
         navigate('/');
       };
 
@@ -38,15 +31,12 @@ function Header() {
                 boxShadow: '0px 1px 5px rgba(0, 0, 0, 0.3)'
             }}
         >
-            {/* Logo */}
             <Typography level="h4">
                 <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
                     <FaRegUserCircle style={{ marginRight: '3px' }} />
                     MyApp
                 </Box>
             </Typography>
-
-            {/* Navigation Links */}
             {
                 token ? 
                 <Box sx={{ display: 'flex', gap: 5 }}>

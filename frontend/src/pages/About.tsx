@@ -11,14 +11,12 @@ import {
   Input,
   Snackbar,
   Alert,
-} from '@mui/joy'; // Joy UI components
+} from '@mui/joy'; 
 import { updateProfile } from '../Redux/authSlice';
 
 function About() {
   const dispatch = useDispatch();
   const { user, token } = useSelector((state: RootState) => state.auth);
-
-  console.log("Token value is:",token)
 
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
@@ -36,7 +34,6 @@ function About() {
 
   const handleUpdate = async () => {
     try {
-      // Make the PUT request to update the profile
       const res = await axios.put(
         'http://localhost:8080/api/v1/auth/update-profile',
         formData,
@@ -46,13 +43,9 @@ function About() {
           },
         }
       );
-  
-      // Show success message and close edit mode
       setMessage(res.data.message || 'Profile updated successfully');
       setSnackbarOpen(true);
       setEditMode(false);
-  
-      // Update the Redux store with the new profile data
       if (token && user) {
         dispatch(updateProfile({
           ...formData,
@@ -165,8 +158,6 @@ function About() {
           </CardContent>
         </Card>
       </Box>
-
-      {/* Snackbar for feedback */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={4000}

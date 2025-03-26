@@ -33,7 +33,6 @@ function Login() {
     e.preventDefault();
     try {
       const res = await loginUser(formData.email, formData.password);
-      console.log("res.status:", res.status);
       switch (res.status) {
         case 200:
             const { token, user } = res.data;

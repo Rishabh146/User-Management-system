@@ -1,7 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
-// Define the interface for a user with new fields
 interface User {
   _id: any;
   status: any;
@@ -13,25 +11,20 @@ interface User {
 }
 
 interface PostState {
-  users: User[];  // Make sure to use `users` instead of `posts`
+  users: User[]; 
   loading: boolean;
   error: string | null;
 }
-
-// Initial state
 const initialState: PostState = {
   users: [],
   loading: false,
   error: null,
 };
-
-// Thunk to fetch users from the backend
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
-  const response = await axios.get('http://localhost:8080/api/v1/auth/all-users'); // Your API endpoint
-  return response.data.users; // Return the `users` array from the response
+  const response = await axios.get('http://localhost:8080/api/v1/auth/all-users'); 
+  return response.data.users; 
 });
 
-// Post slice
 const postSlice = createSlice({
   name: 'posts',
   initialState,
@@ -43,7 +36,7 @@ const postSlice = createSlice({
       })
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.loading = false;
-        state.users = action.payload; // The fetched users
+        state.users = action.payload;
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.loading = false;
