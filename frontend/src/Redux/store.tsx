@@ -1,8 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import authReducer  from './authSlice';
-// redux/store.ts
-import postReducer from './postSlice';  // Import the postReducer
+import postReducer from './usersSlice'; 
 import {
   persistStore,
   persistReducer,

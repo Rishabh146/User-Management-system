@@ -3,26 +3,28 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout/Layout';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../Redux/store';
-import { fetchPosts } from '../Redux/postSlice';
+import { fetchUsers, usersSelectors } from '../Redux/usersSlice';
 import CircularProgress from '@mui/joy/CircularProgress';
 import { Alert, Box, Table } from '@mui/joy';
 import io, { Socket } from 'socket.io-client';
 import Chip from '@mui/joy/Chip';
+import {authSelectors} from '../Redux/authSlice'
 
 const socket: Socket = io('http://localhost:8080', {
   transports: ['websocket'],
 });
 
 function Home() {
-  const token = useSelector((state: RootState) => state.auth.token);
-  const userId = useSelector((state: RootState) => state.auth.user?.id); 
+  const token = useSelector((state: RootState) => authSelectors.selectToken(state));
+  const userId = useSelector((state: RootState) => authSelectors.selectUserId(state)); 
+  const users = useSelector((state: RootState) => usersSelectors.selectUsers(state));
+  const loading = useSelector((state: RootState) => usersSelectors.selectLoading(state)); 
+  const error = useSelector((state: RootState) => usersSelectors.selectError(state)); 
   const dispatch = useDispatch<AppDispatch>();
-  const { users, loading, error } = useSelector((state: RootState) => state.posts);
-
   const [userStatus, setUserStatus] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    dispatch(fetchPosts());
+    dispatch(fetchUsers());
 
     socket.on('connect', () => {
       if (userId) {
@@ -65,10 +67,6 @@ function Home() {
     };
   }, [dispatch, userId]);
 
-  if (loading) return <CircularProgress color="primary" />;
-  if (error) return <Alert color="danger">{error}</Alert>;
-  if (users.length === 0) return <Alert>No users available.</Alert>;
-
   users.map((row, index) => {
     const statusValue = userStatus[row._id];
 
@@ -80,33 +78,42 @@ function Home() {
       <h1>Hello, welcome to Home!</h1>
       {token ? (
         <div>
-          <Table aria-label="User Status Table">
-            <thead>
-              <tr>
-                <th>Serial No.</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((row, index) => (
-                <tr key={row.id}>
-                  <td>{index + 1}</td>
-                  <td>{row.name}</td>
-                  <td>{row.email}</td>
-                  <td>
-
-
-                    {userStatus[row._id] === 'online' ? <Chip color='primary' variant="solid" size='md'>Online</Chip> : <Chip color='neutral' variant="solid" size='md'>Offline</Chip>}
-
-                  </td>
-
-
+          {loading ? (
+            <CircularProgress color="primary" />
+          ) : error ? (
+            <Alert color="danger">{error}</Alert>
+          ) : users.length === 0 ? (
+            <Alert>No users available.</Alert>
+          ) : (
+            <Table aria-label="User Status Table">
+              <thead>
+                <tr>
+                  <th>Serial No.</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {users.map((row, index) => (
+                  <tr key={row._id}>
+                    <td>{index + 1}</td>
+                    <td>{row.name}</td>
+                    <td>{row.email}</td>
+                    <td>
+                      {<Chip
+                        color={userStatus[row._id] === 'online' ? 'primary' : 'neutral'}
+                        variant="solid"
+                        size="md"
+                      >
+                        {userStatus[row._id] === 'online' ? 'Online' : 'Offline'}
+                      </Chip>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
         </div>
       ) : (
         <h3>Please Login to See the Users</h3>

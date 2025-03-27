@@ -12,11 +12,11 @@ import {
   Snackbar,
   Alert,
 } from '@mui/joy'; 
-import { updateProfile } from '../Redux/authSlice';
+import { authSelectors, updateProfile } from '../Redux/authSlice';
 
 function About() {
   const dispatch = useDispatch();
-  const { user, token } = useSelector((state: RootState) => state.auth);
+  const { token, user } = useSelector((state: RootState) => authSelectors.selectAuth(state));
 
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
