@@ -6,29 +6,29 @@ import morgan from 'morgan';
 import cors from 'cors';
 import http from 'http';  
 import { Server } from 'socket.io'; 
+
 dotenv.config();
 const app = express();
-
 
 connectDb();
 app.use(express.json());
 app.use(morgan('dev'));
 app.use(
   cors({
-    allowedHeaders: ['Authorization', 'Content-Type'], 
+    allowedHeaders: ['Authorization', 'Content-Type'],
   })
 );
 
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:4200', 
+    origin: 'http://localhost:4200',
     methods: ['GET', 'POST'],
     credentials: true,
-  },
+  }, 
 });
 
-let userSockets = {}; 
+let userSockets = {};  
 let onlineUsers = new Set();  
 
 io.on('connection', (socket) => {
@@ -42,6 +42,7 @@ io.on('connection', (socket) => {
       userSockets[userId].push(socket.id);
       onlineUsers.add(userId); 
       io.emit('statusUpdate', { userId, status });
+
       const otherOnlineUsers = Array.from(onlineUsers).filter(id => id !== userId);
       socket.emit('initialOnlineUsers', otherOnlineUsers);
     }
@@ -49,6 +50,7 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     let userId = null;
+
     for (const [key, socketIds] of Object.entries(userSockets)) {
       if (socketIds.includes(socket.id)) {
         userId = key;
@@ -65,13 +67,25 @@ io.on('connection', (socket) => {
       }
     }
   });
-});
-app.use('/api/v1/auth', authRoutes);
 
+  socket.on('logout', (userId) => {
+    if (userId) {
+      delete userSockets[userId];
+      onlineUsers.delete(userId);
+      io.emit('statusUpdate', { userId, status: 'offline' });
+    }
+
+    socket.disconnect();
+  });
+});
+
+app.use('/api/v1/auth', authRoutes);
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
   console.log(`App is running on port ${PORT}`);
 });
+
+
 
 
 
