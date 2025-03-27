@@ -2,24 +2,26 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout/Layout';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../Redux/store';
-import { fetchUsers, usersSelectors } from '../Redux/usersSlice';
+import { AppDispatch} from '../Redux/store';
+import { fetchUsers} from '../Redux/usersSlice';
+import { selectUsers, selectLoading, selectError } from '../Redux/usersSlice';
 import CircularProgress from '@mui/joy/CircularProgress';
 import { Alert, Box, Table } from '@mui/joy';
 import io, { Socket } from 'socket.io-client';
 import Chip from '@mui/joy/Chip';
-import {authSelectors} from '../Redux/authSlice'
+import {selectToken, selectUserId } from '../Redux/authSlice';
+
 
 const socket: Socket = io('http://localhost:8080', {
   transports: ['websocket'],
 });
 
 function Home() {
-  const token = useSelector((state: RootState) => authSelectors.selectToken(state));
-  const userId = useSelector((state: RootState) => authSelectors.selectUserId(state)); 
-  const users = useSelector((state: RootState) => usersSelectors.selectUsers(state));
-  const loading = useSelector((state: RootState) => usersSelectors.selectLoading(state)); 
-  const error = useSelector((state: RootState) => usersSelectors.selectError(state)); 
+  const token = useSelector(selectToken);
+  const userId = useSelector(selectUserId);
+  const users = useSelector(selectUsers);
+  const loading = useSelector(selectLoading);
+  const error = useSelector(selectError)
   const dispatch = useDispatch<AppDispatch>();
   const [userStatus, setUserStatus] = useState<{ [key: string]: string }>({});
 
@@ -66,13 +68,7 @@ function Home() {
 
     };
   }, [dispatch, userId]);
-
-  users.map((row, index) => {
-    const statusValue = userStatus[row._id];
-
-  });
-
-
+  
   return (
     <Layout tittle={'Home'}>
       <h1>Hello, welcome to Home!</h1>

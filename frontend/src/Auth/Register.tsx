@@ -147,7 +147,8 @@ function Register() {
                                         />
                                     </FormControl>
 
-                                    <Button 
+                                   <Box>
+                                   <Button 
                                         size="sm" 
                                         sx={{ textAlign: 'center', px: 18, m: 2 }} 
                                         type="submit" 
@@ -155,6 +156,7 @@ function Register() {
                                     >
                                         Sign UP
                                     </Button>
+                                   </Box>
                                     <Typography sx={{ textAlign: 'center', m: 1, p: 1 }}>
                                         <p>
                                             Already Have an Account?

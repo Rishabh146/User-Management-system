@@ -79,7 +79,7 @@ io.on('connection', (socket) => {
   });
 });
 
-app.use('/api/v1/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
   console.log(`App is running on port ${PORT}`);

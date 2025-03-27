@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { persistor, RootState } from "../Redux/store";
-import { authSelectors, clearToken } from "../Redux/authSlice";
+import {selectUserId, clearToken } from "../Redux/authSlice";
 import { toast } from "react-hot-toast";
 import Button from "@mui/joy/Button";
 import { io } from "socket.io-client";
@@ -14,12 +14,8 @@ const socket = io("http://localhost:8080", {
 const LogoutButton: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userId = useSelector((state: RootState) => authSelectors.selectUserId(state)); 
+  const userId = useSelector(selectUserId); 
   const handleLogout = () => {
-    
-
-    console.log("The value of the userId is:",userId)
-    
     if (userId) {
       socket.emit('logout', userId);
     }

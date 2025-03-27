@@ -102,9 +102,11 @@ function Login() {
               />
             </FormControl>
 
+            <Box>
             <Button size="lg" type="submit" sx={{ textAlign: 'center', px: 20, m: 2 }}>
               Login
             </Button>
+            </Box>
             <Typography sx={{ textAlign: 'center', m: 1, p: 1 }}>
               Don't Have an Account?
               <Link component={NavLink} to="/register" underline="none" sx={{ color: '#0000FF', p: 1 }}>

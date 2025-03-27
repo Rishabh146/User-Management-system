@@ -8,7 +8,7 @@ interface User {
   gender: string;
 }
 
-interface AuthState {
+export interface AuthState {
   token: string | null;
   user: User | null; 
 }
@@ -38,17 +38,19 @@ const authSlice = createSlice({
       }
     },
   },
+  selectors: {
+    selectToken: (state: AuthState): string | null => state.token,
+    selectUser: (state: AuthState): User | null => state.user,
+    selectUserId: (state: AuthState): number | undefined => state.user?.id,
+    selectUserEmail: (state: AuthState): string | undefined => state.user?.email,
+    selectAuth: (state: AuthState): { token: string | null; user: User | null } => ({ token: state.token, user: state.user }),
+  }
 });
 
-export const { setToken, clearToken, setUser,updateProfile } = authSlice.actions;
+export const { setToken, clearToken, setUser, updateProfile } = authSlice.actions;
+export const { selectToken, selectUser, selectUserId, selectUserEmail, selectAuth } = authSlice.selectors;
 export default authSlice.reducer;
 
-export const authSelectors = {
-  selectToken: (state: { auth: AuthState }) => state.auth.token,
-  selectUser: (state: { auth: AuthState }) => state.auth.user,
-  selectUserId: (state: { auth: AuthState }) => state.auth.user?.id,
-  selectUserEmail: (state: { auth: AuthState }) => state.auth.user?.email,
-  selectAuth: (state: { auth: AuthState }) => ({ token: state.auth.token, user: state.auth.user })
-};
+
 
 

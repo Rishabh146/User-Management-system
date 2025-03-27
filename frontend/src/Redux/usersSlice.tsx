@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+
 interface User {
   _id: any;
   status: any;
@@ -10,23 +11,25 @@ interface User {
   gender: string;
 }
 
-interface PostState {
+export interface UserState {
   users: User[]; 
   loading: boolean;
   error: string | null;
 }
-const initialState: PostState = {
+
+const initialState: UserState = {
   users: [],
   loading: false,
   error: null,
 };
-export const fetchUsers = createAsyncThunk('posts/fetchUsers', async () => {
-  const response = await axios.get('http://localhost:8080/api/v1/auth/all-users'); 
+
+export const fetchUsers = createAsyncThunk<User[], void>('userInfo/fetchUsers', async () => {
+  const response = await axios.get(`${import.meta.env.VITE_API_URL}/auth/all-users`); 
   return response.data.users; 
 });
 
 const usersSlice = createSlice({
-  name: 'posts',
+  name: 'userInfo',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -43,12 +46,13 @@ const usersSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch posts';
       });
   },
+  selectors: {
+    selectUsers: (state: UserState): User[] => state.users,
+    selectLoading: (state: UserState): boolean => state.loading,
+    selectError: (state: UserState): string | null => state.error,
+  }
 });
-export const usersSelectors = {
-  selectUsers: (state: { posts: PostState }) => state.posts.users,
-  selectLoading: (state: { posts: PostState }) => state.posts.loading,
-  selectError: (state: { posts: PostState }) => state.posts.error,
-};
 
+export const { selectUsers, selectLoading, selectError } = usersSlice.selectors;
 export default usersSlice.reducer;
 
