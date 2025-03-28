@@ -1,5 +1,5 @@
-import { Box, Typography, Button, Link } from '@mui/joy';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Box, Typography, Link } from '@mui/joy';
+import { NavLink} from 'react-router-dom';
 import { FaRegUserCircle } from "react-icons/fa";
 import {  useSelector } from 'react-redux';
 import LogoutButton from '../../pages/LogOut';
