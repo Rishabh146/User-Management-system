@@ -21,4 +21,5 @@ export const registerBox = {
     ml: 45,
     mt: 10,
     borderRadius: 3,
+     gridTemplateColumns: `repeat(2, 1fr)`
 }

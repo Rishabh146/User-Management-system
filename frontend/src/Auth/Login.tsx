@@ -35,12 +35,12 @@ function Login() {
       const res = await loginUser(formData.email, formData.password);
       switch (res.status) {
         case 200:
-            const { token, user } = res.data;
+            { const { token, user } = res.data;
             dispatch(setToken(token));
             dispatch(setUser(user));
             toast.success("User Login Successfully");
             navigate('/');
-            break;
+            break; }
     
         case 400:
             toast.error(res.data.error || "Invalid email or password.");

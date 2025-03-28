@@ -6,8 +6,7 @@ import { AppDispatch} from '../Redux/store';
 import { fetchUsers} from '../Redux/usersSlice';
 import { selectUsers, selectLoading, selectError } from '../Redux/usersSlice';
 import CircularProgress from '@mui/joy/CircularProgress';
-import { Alert, Box, Table } from '@mui/joy';
-import io, { Socket } from 'socket.io-client';
+import { Alert, Table } from '@mui/joy';
 import Chip from '@mui/joy/Chip';
 import {selectToken, selectUserId } from '../Redux/authSlice';
 import {socket} from '../services/Socket'

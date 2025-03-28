@@ -9,7 +9,6 @@ import { ProtectLoginRegister, ProtectRoutes } from '../pages/ProtectRoute';
 
 const App: React.FC = () => {
   return (
-    <>
       <Routes>
         <Route
           path="/"
@@ -44,7 +43,6 @@ const App: React.FC = () => {
 
         <Route path="/*" element={<PageNotFound />} />
       </Routes>
-    </>
   );
 };
 

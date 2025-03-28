@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { persistor, RootState } from "../Redux/store";
+import { persistor } from "../Redux/store";
 import {selectUserId, clearToken } from "../Redux/authSlice";
 import { toast } from "react-hot-toast";
 import Button from "@mui/joy/Button";
