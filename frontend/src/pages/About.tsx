@@ -1,7 +1,6 @@
 import React from 'react'
 import Layout from '../components/Layout/Layout'
 import { useSelector } from 'react-redux';
-import { RootState } from '../Redux/store';
 import { Typography, Card, CardContent, Box, Avatar, Divider, Sheet, Button, IconButton } from '@mui/joy'
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -12,12 +11,12 @@ import {
   Snackbar,
   Alert,
 } from '@mui/joy'; 
-import { authSelectors, updateProfile } from '../Redux/authSlice';
-
+import { selectUser, selectToken, updateProfile } from '../Redux/authSlice';
 function About() {
   const dispatch = useDispatch();
-  const { token, user } = useSelector((state: RootState) => authSelectors.selectAuth(state));
-
+  const user=useSelector(selectUser)
+  const token=useSelector(selectToken)
+  console.log("Token USer",user,token)
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -35,7 +34,7 @@ function About() {
   const handleUpdate = async () => {
     try {
       const res = await axios.put(
-        'http://localhost:8080/api/v1/auth/update-profile',
+        `${import.meta.env.VITE_API_URL}/auth/update-profile`,
         formData,
         {
           headers: {

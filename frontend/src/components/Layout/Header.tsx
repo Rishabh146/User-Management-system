@@ -2,13 +2,12 @@ import { Box, Typography, Button, Link } from '@mui/joy';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaRegUserCircle } from "react-icons/fa";
 import {  useSelector } from 'react-redux';
-import { RootState } from '../../Redux/store';
 import LogoutButton from '../../pages/LogOut';
-import { authSelectors } from '../../Redux/authSlice';
+import { selectToken } from '../../Redux/authSlice';
 
 
 function Header() {
-   const token = useSelector((state: RootState) => authSelectors.selectToken(state));
+   const token = useSelector(selectToken);
     return (
         <Box
             sx={{
