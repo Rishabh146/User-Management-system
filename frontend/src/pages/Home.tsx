@@ -10,11 +10,7 @@ import { Alert, Box, Table } from '@mui/joy';
 import io, { Socket } from 'socket.io-client';
 import Chip from '@mui/joy/Chip';
 import {selectToken, selectUserId } from '../Redux/authSlice';
-
-
-const socket: Socket = io('http://localhost:8080', {
-  transports: ['websocket'],
-});
+import {socket} from '../services/Socket'
 
 function Home() {
   const token = useSelector(selectToken);
