@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 
 interface UserStatusState {
-  statuses: { [key: string]: string };
+  statuses: Record<string, string>;
 }
 
 const initialState: UserStatusState = {

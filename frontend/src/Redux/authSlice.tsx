@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PURGE } from 'redux-persist';
 
 interface User {
   id: number;
@@ -10,32 +11,36 @@ interface User {
 }
 
 export interface AuthState {
-  user: User | null; 
+  user: User | undefined; 
 }
 
 const initialState: AuthState = {
-  user: null, 
+  user: undefined, 
 };
+
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     clearState(state) {
-      // state.token = null;
-      state.user = null; 
+      state.user = undefined; 
     },
-    setUser(state, action: PayloadAction<User>) {
-      state.user = action.payload;
+    setUser(state, action: PayloadAction<User | undefined>) {
+      state.user = action.payload; 
     },
     updateProfile(state, action: PayloadAction<User>) {
       if (state.user) {
         state.user = { ...state.user, ...action.payload };
       }
     },
+    
+  },
+  extraReducers(builder) {
+    builder.addCase(PURGE, () => initialState);
   },
   selectors: {
-    selectUser: (s) => s.user,
+    selectUser: (s) => s.user
   }
 });
 

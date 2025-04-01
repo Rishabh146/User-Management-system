@@ -8,11 +8,13 @@ import Link from '@mui/joy/Link';
 import { Typography } from '@mui/joy';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../Redux/authSlice';
 import { toast } from 'react-hot-toast'
 import { inputstyle, loginBox } from './AuthStyle';
 import { loginUser } from '../services/AuthServices';
+import {AxiosError} from 'axios';
+import { selectUserStatus } from '../Redux/userStatusSlice';
 function Login() {
   const [formData, setFormData] = useState<{ email: string; password: string }>({
     email: '',
@@ -29,44 +31,21 @@ function Login() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit =  (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const res = await loginUser(formData.email, formData.password);
-      switch (res.status) {
-        case 200:
-            { 
-            dispatch(setUser(res.data.user));
-            toast.success("User Login Successfully");
-            navigate('/');
-            break; }
-    
-        case 400:
-            toast.error(res.data.error || "Invalid email or password.");
-            break;
-    
-        case 401:
-            toast.error(res.data.error || "Incorrect login credentials.");
-            break;
-    
-        case 404:
-            toast.error(res.data.error || "User not registered.");
-            break;
-    
-        case 500:
-            toast.error("Internal server error. Please try again later.");
-            break;
-    
-        default:
-            toast.error("An unexpected error occurred.");
-            break;
-    }
-    
-  } catch (error: any) {
-    toast.error(error.response?.data?.error || 'Login failed');
-}
+    loginUser(formData.email, formData.password)
+    .then((user) => {
+      dispatch(setUser(user)); // Directly pass the user
+      toast.success("User Login Successfully");
+      navigate('/');
+    })
+    .catch((err: AxiosError) => {
+      toast.error(err.message || "Incorrect login credentials.");
+    });
 
-  };
+  }
+  const statuses=useSelector(selectUserStatus)
+  console.log("statuses:",statuses)
 
   return (
     <Layout tittle={'Login'}>

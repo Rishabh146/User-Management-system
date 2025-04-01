@@ -49,6 +49,7 @@ function About() {
           id: user.id,
           age: Number(formData.age),
           token: ''
+         
         }));
       }
     } catch (error:any) {
@@ -62,7 +63,6 @@ function About() {
   if (!user) {
     return <Typography>No user is logged in.</Typography>;
   }
-
   return (
     <Layout tittle={'Profile'}>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
