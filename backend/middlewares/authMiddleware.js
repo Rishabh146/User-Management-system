@@ -27,7 +27,7 @@ export const isAdmin= async(req,res,next)=>{
     try {
         const user= await userModels.findById(req.user._id)
 
-        if(user.role!==1){
+        if(user.role[0]==='admin'||user.role[1]==='admin'){
             res.status(401).send({
                 success:false,
                 message:"unothrized User",

@@ -41,28 +41,19 @@ function Register() {
             if (res.status === 200 || res.status === 201) {
                 toast.success("User registered successfully");
                 navigate("/login");
-            } else if (res.status === 400) {
-                toast.error(res.data.error || "Bad request. Please check the fields.");
-            } else if (res.status === 409) {
-                toast.error(res.data.error || "User already exists. Please login.");
-            } else {
-                toast.error(res.data.error || "Something went wrong");
             }
-        } catch (error: any) {
-            if (error.response) {
-                if (error.response.status === 400) {
-                    toast.error(error.response.data.error || "Bad request. Please check the fields.");
-                } else if (error.response.status === 409) {
-                    toast.error(error.response.data.error || "User already exists. Please login.");
-                } else if (error.response.status === 500) {
-                    toast.error(error.response.data.error || "Error in registration");
-                } else {
-                    toast.error(error.response.data.error || "Something went wrong");
-                }
-            } else {
-                toast.error("Network or server error");
+        }catch (error: any) {
+            console.error("Error response:", error);
+        
+            const errorMessage = error.response?.data?.error || error.message || "Something went wrong";
+        
+            toast.error(errorMessage);
+        
+            if (!error.response) {
+                toast.error("Network or server error.");
             }
         }
+        
         
     };
 

@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
-import { RootState } from "../Redux/store";
 import { Navigate } from "react-router-dom";
-import { selectToken } from "../Redux/authSlice";
+import { selectUser } from "../Redux/authSlice";
 import { FC, ReactNode } from "react";
 
 interface ProtectedRouteProps {
@@ -9,19 +8,19 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectRoutes: FC<ProtectedRouteProps> = ({ children }) => {
-    const token: string | null = useSelector(selectToken);
-    if (!token) {
+    const user=useSelector(selectUser)
+    if (!user) {
         return <Navigate to="/login" />;
     }
-    return <>{children}</>;
+    return <div>{children}</div>;
 }
 
 export const ProtectLoginRegister: FC<ProtectedRouteProps> = ({ children }) => {
-    const token: string | null = useSelector(selectToken);
-    if (token) {
+    const user=useSelector(selectUser)
+    if (user) {
         return <Navigate to="/" />;
     }
-    return <>{children}</>;
+    return <div>{children}</div>;
 }
 
 

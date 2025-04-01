@@ -9,7 +9,7 @@ import { Typography } from '@mui/joy';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setToken, setUser } from '../Redux/authSlice';
+import { setUser } from '../Redux/authSlice';
 import { toast } from 'react-hot-toast'
 import { inputstyle, loginBox } from './AuthStyle';
 import { loginUser } from '../services/AuthServices';
@@ -35,9 +35,8 @@ function Login() {
       const res = await loginUser(formData.email, formData.password);
       switch (res.status) {
         case 200:
-            { const { token, user } = res.data;
-            dispatch(setToken(token));
-            dispatch(setUser(user));
+            { 
+            dispatch(setUser(res.data.user));
             toast.success("User Login Successfully");
             navigate('/');
             break; }

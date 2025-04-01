@@ -5,18 +5,16 @@ import { Typography, Card, CardContent, Box, Avatar, Divider, Sheet, Button, Ico
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import {
 
+import {
   Input,
   Snackbar,
   Alert,
 } from '@mui/joy'; 
-import { selectUser, selectToken, updateProfile } from '../Redux/authSlice';
+import { selectUser, updateProfile } from '../Redux/authSlice';
 function About() {
   const dispatch = useDispatch();
   const user=useSelector(selectUser)
-  const token=useSelector(selectToken)
-  console.log("Token USer",user,token)
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -38,21 +36,22 @@ function About() {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${user?.token}`,
           },
         }
       );
       setMessage(res.data.message || 'Profile updated successfully');
       setSnackbarOpen(true);
       setEditMode(false);
-      if (token && user) {
+      if (user?.token && user) {
         dispatch(updateProfile({
           ...formData,
           id: user.id,
           age: Number(formData.age),
+          token: ''
         }));
       }
-    } catch (error: any) {
+    } catch (error:any) {
       console.error(error);
       setMessage(error.response?.data?.message || 'Update failed');
       setSnackbarOpen(true);
@@ -60,7 +59,7 @@ function About() {
   };
   
 
-  if (!token) {
+  if (!user) {
     return <Typography>No user is logged in.</Typography>;
   }
 

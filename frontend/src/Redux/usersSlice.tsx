@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
 interface User {
   _id: any;
   status: any;
@@ -47,9 +46,9 @@ const usersSlice = createSlice({
       });
   },
   selectors: {
-    selectUsers: (state: UserState): User[] => state.users,
-    selectLoading: (state: UserState): boolean => state.loading,
-    selectError: (state: UserState): string | null => state.error,
+    selectUsers: (s) => s.users,
+    selectLoading: (s)  => s.loading,
+    selectError: (s)  => s.error,
   }
 });
 

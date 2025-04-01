@@ -3,11 +3,11 @@ import { NavLink} from 'react-router-dom';
 import { FaRegUserCircle } from "react-icons/fa";
 import {  useSelector } from 'react-redux';
 import LogoutButton from '../../pages/LogOut';
-import { selectToken } from '../../Redux/authSlice';
+import { selectUser } from '../../Redux/authSlice';
 
 
 function Header() {
-   const token = useSelector(selectToken);
+   const user = useSelector(selectUser);
     return (
         <Box
             sx={{
@@ -27,7 +27,7 @@ function Header() {
                 </Box>
             </Typography>
             {
-                token ? 
+                user?
                 <Box sx={{ display: 'flex', gap: 5 }}>
                     <Link
                         component={NavLink}

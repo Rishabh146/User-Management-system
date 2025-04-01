@@ -8,24 +8,22 @@ import { selectUsers, selectLoading, selectError } from '../Redux/usersSlice';
 import CircularProgress from '@mui/joy/CircularProgress';
 import { Alert, Table } from '@mui/joy';
 import Chip from '@mui/joy/Chip';
-import {selectToken, selectUserId } from '../Redux/authSlice';
+import {selectUser} from '../Redux/authSlice';
 import {socket} from '../services/Socket'
 
 function Home() {
-  const token = useSelector(selectToken);
-  const userId = useSelector(selectUserId);
+  const user=useSelector(selectUser)
   const users = useSelector(selectUsers);
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError)
   const dispatch = useDispatch<AppDispatch>();
-  const [userStatus, setUserStatus] = useState<{ [key: string]: string }>({});
-
+  const [userStatus, setUserStatus] = useState<Record<string, string>>({});
   useEffect(() => {
     dispatch(fetchUsers());
 
     socket.on('connect', () => {
-      if (userId) {
-        socket.emit('userStatus', { userId: userId, status: 'online' });
+      if (user?.id) {
+        socket.emit('userStatus', { userId: user.id, status: 'online' });
 
       }
     }
@@ -53,8 +51,8 @@ function Home() {
       }));
     });
     return () => {
-      if (userId) {
-        socket.emit('userStatus', { userId: userId, status: 'offline' });
+      if (user?.id) {
+        socket.emit('userStatus', { userId: user.id, status: 'offline' });
       }
       socket.off('statusUpdate');
       socket.off('connect');
@@ -62,12 +60,12 @@ function Home() {
       socket.off('initialOnlineUsers');
 
     };
-  }, [dispatch, userId]);
+  }, [dispatch, user?.id]);
   
   return (
     <Layout tittle={'Home'}>
       <h1>Hello, welcome to Home!</h1>
-      {token ? (
+      {user ? (
         <div>
           {loading ? (
             <CircularProgress color="primary" />
