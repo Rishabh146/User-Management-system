@@ -15,7 +15,7 @@ import { registerUser } from '../services/AuthServices';
 import { inputstyle, Item } from './AuthStyle';
 import RegisterPageImage from '../assets/images';
 import { AxiosError } from 'axios';
-import { colors } from '../services/Theme';
+import theme from '../services/Theme';
 
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&[\]{}^+_#])([A-Za-z\d@$!%*?&[\]{}^+_#]{8,})$/;
@@ -83,7 +83,7 @@ function Register() {
                     pl: 4,
                   }}
                 >
-                  <Typography level="h1" sx={{ textAlign: 'center', color:colors.primary }}>
+                  <Typography level="h1" sx={{ textAlign: 'center', color:theme.vars.palette.primary }}>
                     Sign Up Here
                   </Typography>
                   <FormControl>
@@ -120,7 +120,7 @@ function Register() {
                     />
                     {showPasswordHint && (
                       <Typography
-                        sx={{ color: colors.danger[600], display: 'inline', ml: 2, pl: 1 }}
+                        sx={{ color: theme.vars.palette.danger[600], display: 'inline', ml: 2, pl: 1 }}
                       >
                         Enter Strong Password
                       </Typography>
@@ -157,12 +157,12 @@ function Register() {
                     </Button>
                   </Box>
                   <Typography sx={{ textAlign: 'center', m: 1, p: 1 }}>
-                    <Box component="span" sx={{ color: colors.primary}}>Already Have an Account?</Box>
+                    <Box component="span" sx={{ color: theme.vars.palette.primary}}>Already Have an Account?</Box>
                     <Link
                       component={NavLink}
                       to="/login"
                       underline="none"
-                      sx={{ color: colors.primary[600], p: 1 }}
+                      sx={{ color: theme.vars.palette.primary[600], p: 1 }}
                     >
                       Login
                     </Link>

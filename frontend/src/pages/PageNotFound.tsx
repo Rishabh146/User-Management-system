@@ -1,7 +1,6 @@
-import { Button, Link, Typography } from '@mui/joy';
+import { Button, Typography } from '@mui/joy';
 import Layout from '../components/Layout/Layout';
 import Box from '@mui/joy/Box';
-import { colors } from '../services/Theme';
 
 import { Link as RouterLink } from 'react-router-dom';
 import { pageNotFound404, pageNotFoundButton, pageNotFoundInnerBox, pageNotFoundOuterBox, pageNotFoundtext } from './PagesStyle';

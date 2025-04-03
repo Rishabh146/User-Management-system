@@ -6,7 +6,7 @@ import Button from "@mui/joy/Button";
 import {selectUser } from "../Redux/authSlice";
 import { socket } from "../services/Socket";
 import { useAppSelector } from "../Redux/Hooks";
-import { colors } from "../services/Theme";
+import theme from "../services/Theme";
 
 
 const LogoutButton: React.FC = () => {
@@ -28,7 +28,7 @@ const LogoutButton: React.FC = () => {
   };
 
   return (
-    <Button onClick={handleLogout} sx={{ color: colors.danger}} variant="solid">
+    <Button onClick={handleLogout} sx={{ color: theme.vars.palette.danger}} variant="solid">
       Logout
     </Button>
   );
