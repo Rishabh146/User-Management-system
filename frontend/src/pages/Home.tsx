@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Layout from '../components/Layout/Layout';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../Redux/store';
+
+import { RootState } from '../Redux/store';
 import { fetchUsers } from '../Redux/usersSlice';
 import { selectUsers, selectLoading, selectError } from '../Redux/usersSlice';
 import CircularProgress from '@mui/joy/CircularProgress';
@@ -10,36 +10,40 @@ import Chip from '@mui/joy/Chip';
 import { selectUser } from '../Redux/authSlice';
 import { socket } from '../services/Socket';
 import { updateUserStatus, setInitialOnlineUsers} from '../Redux/userStatusSlice';
+import { useAppDispatch, useAppSelector } from '../Redux/Hooks';
 
 function Home() {
-  const user = useSelector(selectUser);
-  const users = useSelector(selectUsers);
-  const loading = useSelector(selectLoading);
-  const error = useSelector(selectError);
-  const userStatuses = useSelector((state: RootState) => state.userStatus.statuses); 
-  const dispatch = useDispatch<AppDispatch>();
+  const user = useAppSelector(selectUser);
+  const users = useAppSelector(selectUsers);
+  const loading = useAppSelector(selectLoading);
+  const error = useAppSelector(selectError);
+  const userStatuses = useAppSelector((state: RootState) => state.userStatus.statuses); 
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(fetchUsers()); 
-
+    if (user?.token) {
+      dispatch(fetchUsers()); 
+    }
+  
     socket.on('connect', () => {
       if (user?.id) {
         socket.emit('userStatus', { userId: user.id, status: 'online' });
+
       }
     });
-
+  
     socket.on('connect_error', (err) => {
       console.error('Socket.IO connection error:', err.message);
     });
-
+  
     socket.on('statusUpdate', (data: { userId: string; status: string }) => {
       dispatch(updateUserStatus({ userId: data.userId, status: data.status })); 
     });
-
+  
     socket.on('initialOnlineUsers', (onlineUserIds: string[]) => {
       dispatch(setInitialOnlineUsers(onlineUserIds)); 
     });
-
+  
     return () => {
       if (user?.id) {
         socket.emit('userStatus', { userId: user.id, status: 'offline' });
@@ -49,7 +53,11 @@ function Home() {
       socket.off('connect_error');
       socket.off('initialOnlineUsers');
     };
-  }, [dispatch, user?.id]);
+  }, [dispatch, user?.id, user?.token]);
+  
+
+  console.log("userStatus",userStatuses)
+  console.log("Users", users)
 
   return (
     <Layout tittle={'Home'}>

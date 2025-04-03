@@ -6,11 +6,12 @@ import PageNotFound from '../pages/PageNotFound';
 import Register from '../Auth/Register';
 import Login from '../Auth/Login';
 import {  ProtectRoutes } from '../pages/ProtectRoute';
-import { useSelector } from 'react-redux';
 import { selectUser } from '../Redux/authSlice';
+import { useAppSelector } from '../Redux/Hooks';
+import { User } from '../Redux/types';
 
 const App: React.FC = () => {
-    const user=useSelector(selectUser)
+  const user: User | undefined =useAppSelector(selectUser)
   return (
       <Routes>
         <Route

@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
       onlineUsers.add(userId); 
       io.emit('statusUpdate', { userId, status });
 
-      const otherOnlineUsers = Array.from(onlineUsers).filter(id => id !== userId);
+      const otherOnlineUsers = Array.from(onlineUsers)
       socket.emit('initialOnlineUsers', otherOnlineUsers);
     }
   });
@@ -51,6 +51,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     let userId = null;
 
+    
     for (const [key, socketIds] of Object.entries(userSockets)) {
       if (socketIds.includes(socket.id)) {
         userId = key;

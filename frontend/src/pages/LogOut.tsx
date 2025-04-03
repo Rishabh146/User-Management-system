@@ -1,19 +1,16 @@
 import React from "react";
-import {useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { persistor } from "../Redux/store";
 import { toast } from "react-hot-toast";
 import Button from "@mui/joy/Button";
-import { io } from "socket.io-client";
 import {selectUser } from "../Redux/authSlice";
+import { socket } from "../services/Socket";
+import { useAppSelector } from "../Redux/Hooks";
 
-const socket = io("http://localhost:8080", {
-  transports: ["websocket"],
-});
 
 const LogoutButton: React.FC = () => {
   const navigate = useNavigate();
-  const user = useSelector(selectUser); 
+  const user = useAppSelector(selectUser); 
   const userId=user?.id
   const handleLogout = () => {
     if (userId) {

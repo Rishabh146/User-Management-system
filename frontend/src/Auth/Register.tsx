@@ -12,18 +12,15 @@ import { NavLink } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../services/AuthServices';
-import { inputstyle, Item} from './AuthStyle';
+import { inputstyle, Item } from './AuthStyle';
 import RegisterPageImage from '../assets/images';
+import { AxiosError } from 'axios';
 
 const passwordRegex =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&[\]{}^+_#])([A-Za-z\d@$!%*?&[\]{}^+_#]{8,})$/;
 
 function Register() {
   const navigate = useNavigate();
-  const [errors, setErrors] = useState({
-    email: '',
-    password: '',
-  });
   const [showPasswordHint, setShowPasswordHint] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -36,168 +33,150 @@ function Register() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const res = await registerUser(formData);
+    registerUser(formData)
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          toast.success('User registered successfully');
+          navigate('/login');
+        }
+      })
+      .catch((error: AxiosError<{error:string}>) => {
+        toast.error(error?.response?.data?.error || 'Something went wrong');
 
-      if (res.status === 200 || res.status === 201) {
-        toast.success('User registered successfully');
-        navigate('/login');
-      }
-    } catch (error: any) {
-      console.error('Error response:', error);
-
-      const errorMessage =
-        error.response?.data?.error || error.message || 'Something went wrong';
-
-      toast.error(errorMessage);
-
-      if (!error.response) {
-        toast.error('Network or server error.');
-      }
-    }
+        if (!error.response) {
+          toast.error('Network or server error.');
+        }
+      });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    if (name === 'password') {
+      setShowPasswordHint(!passwordRegex.test(value));
+    }
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-
-    if (name === 'password') {
-      setFormData((prev) => ({
-        ...prev,
-        password: value,
-      }));
-    }
   };
 
   return (
     <Layout tittle={'Register'}>
-    <div>
-    <form onSubmit={handleSubmit}>
-     <Grid
-        container
-        spacing={2}
-        columns={16}
-        sx={{ flexGrow: 1, maxWidth: 1200, maxHeight: 600, }}
-      >
-        <Grid xs={8}>
-          <Item>
-            <Box
-              sx={{
-                maxHeight: 600,
-                maxWidth: 490,
-                my: 4,
-                gap: 2,
-                py: 2,
-                pl: 4,
-              }}
-            >
-              <Typography level="h1" sx={{ textAlign: 'center' }}>
-                Sign Up Here
-              </Typography>
-              <FormControl>
-                <Input
-                  name="name"
-                  type="text"
-                  placeholder="Name"
-                  sx={inputstyle}
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </FormControl>
-              <FormControl>
-                <Input
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  sx={inputstyle}
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </FormControl>
-              <FormControl>
-                <Input
-                  placeholder="Password"
-                  sx={inputstyle}
-                  name="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  onFocus={() => setShowPasswordHint(true)}
-                  onBlur={() => setShowPasswordHint(false)}
-                  required
-                />
-                {showPasswordHint && (
-                  <Typography
-                    sx={{ color: 'red', display: 'inline', ml: 2, pl: 1 }}
-                  >
-                    Enter Strong Password
-                  </Typography>
-                )}
-                {errors.password && (
-                  <Typography sx={{ color: 'red' }}>
-                    {errors.password}
-                  </Typography>
-                )}
-              </FormControl>
-              <FormControl>
-                <Input
-                  name="gender"
-                  placeholder="Gender"
-                  sx={inputstyle}
-                  value={formData.gender}
-                  onChange={handleChange}
-                />
-              </FormControl>
-              <FormControl>
-                <Input
-                  placeholder="Age"
-                  sx={inputstyle}
-                  name="age"
-                  type="number"
-                  value={formData.age}
-                  onChange={handleChange}
-                />
-              </FormControl>
-
-              <Box>
-                <Button
-                  size="sm"
-                  sx={{ textAlign: 'center', px: 18, m: 2 }}
-                  type="submit"
-                  disabled={!passwordRegex.test(formData.password)}
+      <div>
+        <form onSubmit={handleSubmit}>
+          <Grid
+            container
+            spacing={2}
+            columns={16}
+            sx={{ flexGrow: 1, maxWidth: 1200, maxHeight: 600 }}
+          >
+            <Grid xs={8}>
+              <Item>
+                <Box
+                  sx={{
+                    maxHeight: 600,
+                    maxWidth: 490,
+                    my: 4,
+                    gap: 2,
+                    py: 2,
+                    pl: 4,
+                  }}
                 >
-                  Sign UP
-                </Button>
-              </Box>
-              <Typography sx={{ textAlign: 'center', m: 1, p: 1 }}>
-                <p>
-                  Already Have an Account?
-                  <Link
-                    component={NavLink}
-                    to="/login"
-                    underline="none"
-                    sx={{ color: '#0000FF', p: 1 }}
-                  >
-                    Login
-                  </Link>
-                </p>
-              </Typography>
-            </Box>
-          </Item>
-        </Grid>
-        <Grid xs={8}>
-          <Item>
-            <RegisterPageImage />
-          </Item>
-        </Grid>
-      </Grid>
-     </form>
-    </div>
+                  <Typography level="h1" sx={{ textAlign: 'center' }}>
+                    Sign Up Here
+                  </Typography>
+                  <FormControl>
+                    <Input
+                      name="name"
+                      type="text"
+                      placeholder="Name"
+                      sx={inputstyle}
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <Input
+                      name="email"
+                      type="email"
+                      placeholder="Email"
+                      sx={inputstyle}
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <Input
+                      placeholder="Password"
+                      sx={inputstyle}
+                      name="password"
+                      type="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                    />
+                    {showPasswordHint && (
+                      <Typography
+                        sx={{ color: 'red', display: 'inline', ml: 2, pl: 1 }}
+                      >
+                        Enter Strong Password
+                      </Typography>
+                    )}
+                  </FormControl>
+                  <FormControl>
+                    <Input
+                      name="gender"
+                      placeholder="Gender"
+                      sx={inputstyle}
+                      value={formData.gender}
+                      onChange={handleChange}
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <Input
+                      placeholder="Age"
+                      sx={inputstyle}
+                      name="age"
+                      type="number"
+                      value={formData.age}
+                      onChange={handleChange}
+                    />
+                  </FormControl>
+
+                  <Box>
+                    <Button
+                      size="sm"
+                      sx={{ textAlign: 'center', px: 18, m: 2 }}
+                      type="submit"
+                      disabled={!passwordRegex.test(formData.password)}
+                    >
+                      Sign UP
+                    </Button>
+                  </Box>
+                  <Typography sx={{ textAlign: 'center', m: 1, p: 1 }}>
+                    <Box component="span">Already Have an Account?</Box>
+                    <Link
+                      component={NavLink}
+                      to="/login"
+                      underline="none"
+                      sx={{ color: 'primary.500', p: 1 }}
+                    >
+                      Login
+                    </Link>
+                  </Typography>
+                </Box>
+              </Item>
+            </Grid>
+            <Grid xs={8}>
+              <Item>
+                <RegisterPageImage />
+              </Item>
+            </Grid>
+          </Grid>
+        </form>
+      </div>
     </Layout>
   );
 }

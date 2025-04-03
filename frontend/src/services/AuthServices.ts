@@ -3,7 +3,7 @@ import { RegisterUser, User } from '../Redux/types';
 const API_URL = import.meta.env.VITE_API_URL;
 export const loginUser = async (email: string, password: string): Promise<User> => {
     return axios.post<{ user: User }>(`${API_URL}/auth/login`, { email, password })
-       .then((res) => res.data.user); // Extract `user` from the response
+       .then((res) => res.data.user);
  };
  
 

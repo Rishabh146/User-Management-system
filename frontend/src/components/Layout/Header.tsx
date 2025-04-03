@@ -1,13 +1,13 @@
 import { Box, Typography, Link } from '@mui/joy';
 import { NavLink} from 'react-router-dom';
 import { FaRegUserCircle } from "react-icons/fa";
-import {  useSelector } from 'react-redux';
 import LogoutButton from '../../pages/LogOut';
 import { selectUser } from '../../Redux/authSlice';
+import { useAppSelector } from '../../Redux/Hooks';
 
 
 function Header() {
-   const user = useSelector(selectUser);
+   const user = useAppSelector(selectUser);
     return (
         <Box
             sx={{
@@ -33,7 +33,7 @@ function Header() {
                         component={NavLink}
                         to="/"
                         underline="none"
-                        sx={{ color: '#000000' }}
+                        sx={{ color: 'text.primary' }}
                     >
                         Home
                     </Link>
@@ -41,7 +41,7 @@ function Header() {
                         component={NavLink}
                         to="/about"
                         underline="none"
-                        sx={{ color: '#000000' }}
+                        sx={{ color: 'text.primary' }}
                     >
                         About
                     </Link>
@@ -53,7 +53,7 @@ function Header() {
                         component={NavLink}
                         to="/register"
                         underline="none"
-                        sx={{ color: '#000000' }}
+                        sx={{ color: 'text.primary'}}
                     >
                         Register
                     </Link>
@@ -61,7 +61,7 @@ function Header() {
                         component={NavLink}
                         to="/login"
                         underline="none"
-                        sx={{ color: '#000000' }}
+                        sx={{ color: 'text.primary' }}
                     >
                         Login
                     </Link>

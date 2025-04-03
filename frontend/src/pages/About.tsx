@@ -1,25 +1,25 @@
 import React from 'react'
 import Layout from '../components/Layout/Layout'
-import { useSelector } from 'react-redux';
 import { Typography, Card, CardContent, Box, Avatar, Divider, Sheet, Button, IconButton } from '@mui/joy'
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import axios from 'axios';
+import {AxiosError} from 'axios'
 
 import {
   Input,
   Snackbar,
   Alert,
 } from '@mui/joy'; 
-import { selectUser, updateProfile } from '../Redux/authSlice';
+import { selectUser} from '../Redux/authSlice';
+import {updateUserProfile } from '../Redux/usersSlice';
+import { useAppDispatch, useAppSelector } from '../Redux/Hooks';
 function About() {
-  const dispatch = useDispatch();
-  const user=useSelector(selectUser)
+  const dispatch = useAppDispatch();
+  const user=useAppSelector(selectUser)
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || '',
     email: user?.email || '',
-    age: user?.age?.toString() || '',
+    age: user?.age,
     gender: user?.gender || '',
   });
   const [message, setMessage] = useState('');
@@ -29,35 +29,23 @@ function About() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleUpdate = async () => {
-    try {
-      const res = await axios.put(
-        `${import.meta.env.VITE_API_URL}/auth/update-profile`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
+  const handleUpdate = () => {
+    dispatch(updateUserProfile({ profileData: formData })).unwrap()
+      .then((resultAction) => {
+        if (updateUserProfile.fulfilled.match(resultAction)) {
+          setMessage("Profile updated successfully");
+        } else {
+          setMessage(resultAction.payload || "Update failed");
         }
-      );
-      setMessage(res.data.message || 'Profile updated successfully');
-      setSnackbarOpen(true);
-      setEditMode(false);
-      if (user?.token && user) {
-        dispatch(updateProfile({
-          ...formData,
-          id: user.id,
-          age: Number(formData.age),
-          token: ''
-         
-        }));
-      }
-    } catch (error:any) {
-      console.error(error);
-      setMessage(error.response?.data?.message || 'Update failed');
-      setSnackbarOpen(true);
-    }
+  
+        setSnackbarOpen(true);
+      })
+      .catch((error: AxiosError) => {
+        setMessage("Update failed");
+        setSnackbarOpen(true);
+      });
   };
+  
   
 
   if (!user) {
@@ -166,9 +154,8 @@ function About() {
           color="primary"
           variant="soft"
           endDecorator={
-            <IconButton size="sm" variant="plain" color="neutral" onClick={() => setSnackbarOpen(false)}>
+            <IconButton size="sm" variant="plain" color="neutral" onClick={() => setSnackbarOpen(false)}/>
 
-            </IconButton>
           }
         >
           {message}
