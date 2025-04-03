@@ -13,6 +13,7 @@ import { inputstyle, loginBox } from './AuthStyle';
 import { loginUser } from '../services/AuthServices';
 import { AxiosError } from 'axios';
 import { useAppDispatch } from '../Redux/Hooks';
+import theme from '../services/Theme';
 function Login() {
   const [formData, setFormData] = useState<{ email: string; password: string }>(
     {
@@ -90,7 +91,7 @@ function Login() {
                 component={NavLink}
                 to="/register"
                 underline="none"
-                sx={{ color: 'primary.500', p: 1 }}
+                sx={{ color: theme.vars.palette.primary, p: 1 }}
               >
                 Register
               </Link>
