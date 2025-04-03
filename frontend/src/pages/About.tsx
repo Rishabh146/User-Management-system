@@ -3,6 +3,7 @@ import Layout from '../components/Layout/Layout'
 import { Typography, Card, CardContent, Box, Avatar, Divider, Sheet, Button, IconButton } from '@mui/joy'
 import { useState } from 'react';
 import {AxiosError} from 'axios'
+import { colors } from '../services/Theme';
 
 import {
   Input,
@@ -105,8 +106,7 @@ function About() {
                   />
                   <Button
                     variant="solid"
-                    color="primary"
-                    sx={{ mt: 2 }}
+                    sx={{ mt: 2, color: colors.primary }}
                     onClick={handleUpdate}
                   >
                     Save Changes
@@ -114,27 +114,27 @@ function About() {
                 </>
               ) : (
                 <>
-                  <Typography level="body-md" color="neutral" mt={1}>
+                  <Typography level="body-md" sx={{ color: colors.primary, mt:1}}>
                     <strong>Name:</strong>{' '}
-                    <Typography color="primary" level="body-md" display="inline">
+                    <Typography sx={{ color: colors.primary}} level="body-md" display="inline">
                       {user?.name}
                     </Typography>
                   </Typography>
-                  <Typography level="body-md" color="neutral" mt={1}>
+                  <Typography level="body-md" sx={{ color: colors.primary, mt:1}}>
                     <strong>Email:</strong>{' '}
-                    <Typography color="primary" level="body-md" display="inline">
+                    <Typography sx={{ color: colors.primary}} level="body-md" display="inline">
                       {user?.email}
                     </Typography>
                   </Typography>
-                  <Typography level="body-md" color="neutral" mt={1}>
+                  <Typography level="body-md" sx={{ color: colors.primary, mt:1}}>
                     <strong>Age:</strong>{' '}
-                    <Typography color="primary" level="body-md" display="inline">
+                    <Typography sx={{ color: colors.primary}} level="body-md" display="inline">
                       {user?.age}
                     </Typography>
                   </Typography>
-                  <Typography level="body-md" color="neutral" mt={1}>
+                  <Typography level="body-md" sx={{ color: colors.primary, mt:1}}>
                     <strong>Gender:</strong>{' '}
-                    <Typography color="primary" level="body-md" display="inline">
+                    <Typography sx={{ color: colors.primary}} level="body-md" display="inline">
                       {user?.gender}
                     </Typography>
                   </Typography>
@@ -151,10 +151,10 @@ function About() {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert
-          color="primary"
+          sx={{ color: colors.primary, mt:1}}
           variant="soft"
           endDecorator={
-            <IconButton size="sm" variant="plain" color="neutral" onClick={() => setSnackbarOpen(false)}/>
+            <IconButton size="sm" variant="plain" sx={{ color: colors.primary}} onClick={() => setSnackbarOpen(false)}/>
 
           }
         >

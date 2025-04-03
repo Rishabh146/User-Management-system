@@ -11,6 +11,7 @@ import { selectUser } from '../Redux/authSlice';
 import { socket } from '../services/Socket';
 import { updateUserStatus, setInitialOnlineUsers} from '../Redux/userStatusSlice';
 import { useAppDispatch, useAppSelector } from '../Redux/Hooks';
+import { colors } from '../services/Theme';
 
 function Home() {
   const user = useAppSelector(selectUser);
@@ -65,9 +66,9 @@ function Home() {
       {user ? (
         <div>
           {loading ? (
-            <CircularProgress color="primary" />
+            <CircularProgress sx={{ color: colors.primary}} />
           ) : error ? (
-            <Alert color="danger">{error}</Alert>
+            <Alert sx={{ color: colors.danger}}>{error}</Alert>
           ) : users.length === 0 ? (
             <Alert>No users available.</Alert>
           ) : (

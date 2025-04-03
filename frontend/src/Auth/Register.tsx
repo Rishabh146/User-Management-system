@@ -15,6 +15,7 @@ import { registerUser } from '../services/AuthServices';
 import { inputstyle, Item } from './AuthStyle';
 import RegisterPageImage from '../assets/images';
 import { AxiosError } from 'axios';
+import { colors } from '../services/Theme';
 
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&[\]{}^+_#])([A-Za-z\d@$!%*?&[\]{}^+_#]{8,})$/;
@@ -68,7 +69,7 @@ function Register() {
             container
             spacing={2}
             columns={16}
-            sx={{ flexGrow: 1, maxWidth: 1200, maxHeight: 600 }}
+            sx={{ flexGrow: 1, maxWidth: 1200, maxHeight: 600 , m:20}}
           >
             <Grid xs={8}>
               <Item>
@@ -82,7 +83,7 @@ function Register() {
                     pl: 4,
                   }}
                 >
-                  <Typography level="h1" sx={{ textAlign: 'center' }}>
+                  <Typography level="h1" sx={{ textAlign: 'center', color:colors.primary }}>
                     Sign Up Here
                   </Typography>
                   <FormControl>
@@ -119,7 +120,7 @@ function Register() {
                     />
                     {showPasswordHint && (
                       <Typography
-                        sx={{ color: 'red', display: 'inline', ml: 2, pl: 1 }}
+                        sx={{ color: colors.danger[600], display: 'inline', ml: 2, pl: 1 }}
                       >
                         Enter Strong Password
                       </Typography>
@@ -147,8 +148,8 @@ function Register() {
 
                   <Box>
                     <Button
-                      size="sm"
-                      sx={{ textAlign: 'center', px: 18, m: 2 }}
+                      size="md"
+                      sx={{ textAlign: 'center', px: 25, m: 2, py:2 }}
                       type="submit"
                       disabled={!passwordRegex.test(formData.password)}
                     >
@@ -156,12 +157,12 @@ function Register() {
                     </Button>
                   </Box>
                   <Typography sx={{ textAlign: 'center', m: 1, p: 1 }}>
-                    <Box component="span">Already Have an Account?</Box>
+                    <Box component="span" sx={{ color: colors.primary}}>Already Have an Account?</Box>
                     <Link
                       component={NavLink}
                       to="/login"
                       underline="none"
-                      sx={{ color: 'primary.500', p: 1 }}
+                      sx={{ color: colors.primary[600], p: 1 }}
                     >
                       Login
                     </Link>
