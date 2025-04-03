@@ -5,21 +5,25 @@ import About from '../pages/About';
 import PageNotFound from '../pages/PageNotFound';
 import Register from '../Auth/Register';
 import Login from '../Auth/Login';
-import { ProtectLoginRegister, ProtectRoutes } from '../pages/ProtectRoute';
+import {  ProtectRoutes } from '../pages/ProtectRoute';
+import { selectUser } from '../Redux/authSlice';
+import { useAppSelector } from '../Redux/Hooks';
+import { User } from '../Redux/types';
 
 const App: React.FC = () => {
+  const user: User | undefined =useAppSelector(selectUser)
   return (
       <Routes>
         <Route
           path="/"
-          element={<ProtectRoutes>
+          element={<ProtectRoutes user={user}>
             <Home/>
           </ProtectRoutes>}
         />
         <Route
           path="/about"
           element={
-              <ProtectRoutes>
+              <ProtectRoutes user={user}>
                 <About />
               </ProtectRoutes>
           }
@@ -27,20 +31,19 @@ const App: React.FC = () => {
         <Route
           path="/login"
           element={
-            <ProtectLoginRegister>
+             
               <Login />
-            </ProtectLoginRegister> 
+           
           }
         />
         <Route
           path="/register"
           element={
-            <ProtectLoginRegister>
+             
               <Register />
-            </ProtectLoginRegister>
+         
           }
         />
-
         <Route path="/*" element={<PageNotFound />} />
       </Routes>
   );

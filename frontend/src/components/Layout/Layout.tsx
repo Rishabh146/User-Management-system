@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode} from 'react';
 import Header from './Header';
 import { Box } from '@mui/joy';
 import { Helmet } from "react-helmet";
@@ -9,6 +9,7 @@ type LayoutProps = {
 };
 
 function Layout({ children, tittle }: LayoutProps) {
+
   return (
     <>
       <Toaster position="top-center" containerStyle={{

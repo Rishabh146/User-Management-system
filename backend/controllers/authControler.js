@@ -6,14 +6,10 @@ export const registerController = async (req, res) => {
   try {
     const { name, email, password, age, gender } = req.body;
 
-    if (!name) {
-      return res.status(400).send({ error: "Name is required" });
-    }
-    if (!email) {
-      return res.status(400).send({ error: "Email is required" });
-    }
-    if (!password) {
-      return res.status(400).send({ error: "Password is required" });
+    if (!name || !email || !password) {
+      return res.status(400).send({
+        error: !name ? "Name is required" : !email ? "Email is required" : "Password is required"
+      });
     }
     const existingUser = await userModels.findOne({ email });
     if (existingUser) {
@@ -61,9 +57,9 @@ export const loginController = async (req, res) => {
               email: user.email,
               gender: user.gender,
               age: user.age,
-              id: user._id
+              id: user._id,
+              token
           },
-          token
       });
 
   } catch (error) {
@@ -75,7 +71,7 @@ export const loginController = async (req, res) => {
 
 
 
-export const updateControler = async (req, res) => {
+export const updateUserProfileControler = async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
 
   try {

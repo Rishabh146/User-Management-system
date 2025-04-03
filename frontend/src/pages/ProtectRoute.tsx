@@ -1,27 +1,19 @@
-import { useSelector } from "react-redux";
-import { RootState } from "../Redux/store";
-import { Navigate } from "react-router-dom";
-import { selectToken } from "../Redux/authSlice";
+
+import { Navigate} from "react-router-dom";
 import { FC, ReactNode } from "react";
+import { User } from "../Redux/types";
 
 interface ProtectedRouteProps {
     children: ReactNode;
+    user: User | undefined
 }
 
-export const ProtectRoutes: FC<ProtectedRouteProps> = ({ children }) => {
-    const token: string | null = useSelector(selectToken);
-    if (!token) {
+export const ProtectRoutes: FC<ProtectedRouteProps> = ({ children, user }) => {
+    if (!user) {
         return <Navigate to="/login" />;
     }
-    return <>{children}</>;
+    return <div>{children}</div>;
 }
-
-export const ProtectLoginRegister: FC<ProtectedRouteProps> = ({ children }) => {
-    const token: string | null = useSelector(selectToken);
-    if (token) {
-        return <Navigate to="/" />;
-    }
-    return <>{children}</>;
-}
+ 
 
 

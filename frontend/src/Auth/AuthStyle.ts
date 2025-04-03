@@ -1,3 +1,5 @@
+import { Sheet, styled } from "@mui/joy";
+
 export const inputstyle = {
     m: 2,
     p: 1,
@@ -23,3 +25,14 @@ export const registerBox = {
     borderRadius: 3,
      gridTemplateColumns: `repeat(2, 1fr)`
 }
+export const Item = styled(Sheet)(({ theme }) => ({
+  backgroundColor: theme.palette.background.surface,
+  ...theme.typography['body-sm'],
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  borderRadius: theme.radius.sm,
+  color: theme.vars.palette.text.secondary,
+  ...(theme.applyStyles && theme.applyStyles('dark', {
+    backgroundColor: theme.palette.background.level1,
+  })),
+}));

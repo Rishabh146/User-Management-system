@@ -1,73 +1,68 @@
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Layout from '../components/Layout/Layout';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch} from '../Redux/store';
-import { fetchUsers} from '../Redux/usersSlice';
+
+import { RootState } from '../Redux/store';
+import { fetchUsers } from '../Redux/usersSlice';
 import { selectUsers, selectLoading, selectError } from '../Redux/usersSlice';
 import CircularProgress from '@mui/joy/CircularProgress';
 import { Alert, Table } from '@mui/joy';
 import Chip from '@mui/joy/Chip';
-import {selectToken, selectUserId } from '../Redux/authSlice';
-import {socket} from '../services/Socket'
+import { selectUser } from '../Redux/authSlice';
+import { socket } from '../services/Socket';
+import { updateUserStatus, setInitialOnlineUsers} from '../Redux/userStatusSlice';
+import { useAppDispatch, useAppSelector } from '../Redux/Hooks';
 
 function Home() {
-  const token = useSelector(selectToken);
-  const userId = useSelector(selectUserId);
-  const users = useSelector(selectUsers);
-  const loading = useSelector(selectLoading);
-  const error = useSelector(selectError)
-  const dispatch = useDispatch<AppDispatch>();
-  const [userStatus, setUserStatus] = useState<{ [key: string]: string }>({});
+  const user = useAppSelector(selectUser);
+  const users = useAppSelector(selectUsers);
+  const loading = useAppSelector(selectLoading);
+  const error = useAppSelector(selectError);
+  const userStatuses = useAppSelector((state: RootState) => state.userStatus.statuses); 
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(fetchUsers());
-
+    if (user?.token) {
+      dispatch(fetchUsers()); 
+    }
+  
     socket.on('connect', () => {
-      if (userId) {
-        socket.emit('userStatus', { userId: userId, status: 'online' });
+      if (user?.id) {
+        socket.emit('userStatus', { userId: user.id, status: 'online' });
 
       }
-    }
-    );
-
+    });
+  
     socket.on('connect_error', (err) => {
       console.error('Socket.IO connection error:', err.message);
     });
-
+  
     socket.on('statusUpdate', (data: { userId: string; status: string }) => {
-      setUserStatus((prevState) => ({
-        ...prevState,
-        [data.userId]: data.status,
-      }));
+      dispatch(updateUserStatus({ userId: data.userId, status: data.status })); 
     });
-
+  
     socket.on('initialOnlineUsers', (onlineUserIds: string[]) => {
-      const updatedStatus: { [key: string]: string } = {};
-      onlineUserIds.forEach(userId => {
-        updatedStatus[userId] = 'online';
-      });
-      setUserStatus((prevState) => ({
-        ...prevState,
-        ...updatedStatus,
-      }));
+      dispatch(setInitialOnlineUsers(onlineUserIds)); 
     });
+  
     return () => {
-      if (userId) {
-        socket.emit('userStatus', { userId: userId, status: 'offline' });
+      if (user?.id) {
+        socket.emit('userStatus', { userId: user.id, status: 'offline' });
       }
       socket.off('statusUpdate');
       socket.off('connect');
       socket.off('connect_error');
       socket.off('initialOnlineUsers');
-
     };
-  }, [dispatch, userId]);
+  }, [dispatch, user?.id, user?.token]);
   
+
+  console.log("userStatus",userStatuses)
+  console.log("Users", users)
+
   return (
     <Layout tittle={'Home'}>
       <h1>Hello, welcome to Home!</h1>
-      {token ? (
+      {user ? (
         <div>
           {loading ? (
             <CircularProgress color="primary" />
@@ -92,13 +87,13 @@ function Home() {
                     <td>{row.name}</td>
                     <td>{row.email}</td>
                     <td>
-                      {<Chip
-                        color={userStatus[row._id] === 'online' ? 'primary' : 'neutral'}
+                      <Chip
+                        color={userStatuses[row._id] === 'online' ? 'primary' : 'neutral'}
                         variant="solid"
                         size="md"
                       >
-                        {userStatus[row._id] === 'online' ? 'Online' : 'Offline'}
-                      </Chip>}
+                        {userStatuses[row._id] === 'online' ? 'Online' : 'Offline'}
+                      </Chip>
                     </td>
                   </tr>
                 ))}

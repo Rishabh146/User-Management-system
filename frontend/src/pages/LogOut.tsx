@@ -1,29 +1,29 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { persistor } from "../Redux/store";
-import {selectUserId, clearToken } from "../Redux/authSlice";
 import { toast } from "react-hot-toast";
 import Button from "@mui/joy/Button";
-import { io } from "socket.io-client";
+import {selectUser } from "../Redux/authSlice";
+import { socket } from "../services/Socket";
+import { useAppSelector } from "../Redux/Hooks";
 
-const socket = io("http://localhost:8080", {
-  transports: ["websocket"],
-});
 
 const LogoutButton: React.FC = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userId = useSelector(selectUserId); 
+  const user = useAppSelector(selectUser); 
+  const userId=user?.id
   const handleLogout = () => {
     if (userId) {
       socket.emit('logout', userId);
     }
+    persistor.purge().then((res)=> {
 
-    dispatch(clearToken());
-    persistor.purge();
-    toast.success("User Logout Successfully");
-    navigate("/");
+      navigate("/login", {replace: true});
+      toast.success("User Logout Successfully");
+    }).catch(()=>{
+      console.log('some error occures')
+    });
+    
   };
 
   return (

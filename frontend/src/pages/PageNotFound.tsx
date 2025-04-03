@@ -1,8 +1,6 @@
-
 import { Button, Link, Typography } from '@mui/joy';
 import Layout from '../components/Layout/Layout'
 import Box from '@mui/joy/Box';
-
 
 function PageNotFound() {
   return (
@@ -14,9 +12,9 @@ function PageNotFound() {
         alignItems: 'center',
         height: '100vh',
         flexDirection: 'column',
-        backgroundColor: '#2C3E50', 
+        backgroundColor: 'neutral.800',
         textAlign: 'center',
-        color: '#fff', 
+        color: 'neutral.100',
         padding: '20px', 
         borderRadius: '8px',
       }}
@@ -45,20 +43,19 @@ function PageNotFound() {
       </Typography>
       <Button
         component={Link}
-        // to="/"
         variant="solid"
-        color="primary"
+        color="danger"
         sx={{
           padding: '15px 30px',
           fontSize: '1.2rem',
           fontWeight: '600',
           borderRadius: '8px',
-          background: '#FF6347',
-          color: '#fff',
+          backgroundColor: 'danger.500',
+          color: 'neutral.100',
           boxShadow: '0px 10px 15px rgba(255, 99, 71, 0.4)',
           '&:hover': {
-            background: '#FF4500',
-            color: '#fff',
+            backgroundColor: 'danger.600',
+            color: 'neutral.100',
           },
         }}
       >
@@ -69,4 +66,4 @@ function PageNotFound() {
   )
 }
 
-export default PageNotFound
+export default PageNotFound;
