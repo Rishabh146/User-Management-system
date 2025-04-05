@@ -14,7 +14,6 @@ import { loginUser } from '../services/AuthServices';
 import { AxiosError } from 'axios';
 import { useAppDispatch } from '../Redux/Hooks';
 import theme from '../services/Theme';
-import { socket } from '../services/Socket';
 
 function Login() {
   const [formData, setFormData] = useState<{ email: string; password: string }>({
@@ -37,7 +36,6 @@ function Login() {
     loginUser(formData.email, formData.password)
       .then((user) => {
         dispatch(setUser(user));
-        // socket.emit('userStatus', { userId: user.id, status: 'online' });
         toast.success('User Login Successfully');
         navigate('/');
       })
