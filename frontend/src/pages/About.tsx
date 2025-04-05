@@ -54,13 +54,17 @@ function About() {
   }
   return (
     <Layout tittle={'Profile'}>
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
+     <Box sx={{ minHeight: '84vh'}}>
+     <Typography level="h2" sx={{ textAlign: 'center', my: 2 }}>
+              Welcome {user?.name}, check out who are online 
+            </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6}}>
         <Card variant="outlined" sx={{ width: 400, borderRadius: 'md', boxShadow: 'lg' }}>
           <CardContent>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 2 }}>
               <Avatar size="lg" />
               <Typography level="h3" mt={1}>
-                User Profile
+                {user.name}
               </Typography>
               <Button variant="solid" sx={{ mt: 1 }} onClick={() => setEditMode(!editMode)}>
                 {editMode ? 'Cancel' : 'Edit Profile'}
@@ -161,6 +165,8 @@ function About() {
           {message}
         </Alert>
       </Snackbar>
+
+     </Box>
     </Layout>
   );
 }

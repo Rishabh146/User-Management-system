@@ -3,6 +3,7 @@ import Header from './Header';
 import { Box } from '@mui/joy';
 import { Helmet } from "react-helmet";
 import { Toaster } from 'react-hot-toast';
+import Footer from './Footer';
 type LayoutProps = {
   children: ReactNode;
   tittle: ReactNode;
@@ -26,6 +27,7 @@ function Layout({ children, tittle }: LayoutProps) {
       <Box component="main" sx={{ minHeight: '76vh' }}>
         {children}
       </Box>
+      <Footer/>
     </>
   );
 }
