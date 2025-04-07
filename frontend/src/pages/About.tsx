@@ -31,14 +31,14 @@ function About() {
   };
 
   const handleUpdate = () => {
-    dispatch(updateUserProfile({ profileData: formData })).unwrap()
+    dispatch(updateUserProfile({ profileData: formData }))
       .then((resultAction) => {
         if (updateUserProfile.fulfilled.match(resultAction)) {
           setMessage("Profile updated successfully");
+          setEditMode(false);
         } else {
-          setMessage(resultAction.payload || "Update failed");
+          setMessage("Update failed");
         }
-  
         setSnackbarOpen(true);
       })
       .catch((error: AxiosError) => {
@@ -46,6 +46,7 @@ function About() {
         setSnackbarOpen(true);
       });
   };
+  
   
   
 
@@ -56,7 +57,7 @@ function About() {
     <Layout tittle={'Profile'}>
      <Box sx={{ minHeight: '84vh'}}>
      <Typography level="h2" sx={{ textAlign: 'center', my: 2 }}>
-              Welcome {user?.name}, check out who are online 
+              Welcome {user?.name} 
             </Typography>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6}}>
         <Card variant="outlined" sx={{ width: 400, borderRadius: 'md', boxShadow: 'lg' }}>

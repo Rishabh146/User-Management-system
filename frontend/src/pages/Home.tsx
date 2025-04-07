@@ -64,7 +64,7 @@ function Home() {
   return (
     <Layout tittle={'Home'}>
       <Typography level="h2" sx={{ textAlign: 'center', my: 2 }}>
-        Welcome {user?.name}, check out who are online 
+        Welcome {user?.name}, check out who's online 
       </Typography>
 
       {user ? (
