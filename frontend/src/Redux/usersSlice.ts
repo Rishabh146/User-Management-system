@@ -24,7 +24,7 @@ export const fetchUsers = createAsyncThunk<UserInfoType[], void, { state: RootSt
   "userInfo/fetchUsers",
   async (_, { getState, rejectWithValue }) => {
     const state = getState();
-    const token = state.auth.user?.token;
+    const token = state.auth?.user?.token;
 
     if (!token) {
       return rejectWithValue("Token not found");
