@@ -1,26 +1,23 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import ApiService from '../services/ApiServices'; 
 import { RootState } from './store';
-import { updateProfileType} from './types';
-import {AxiosError} from 'axios'
-import { UserInfoType } from './types';
+import { updateProfileType } from '../models/types';
+import { AxiosError } from 'axios';
+import { UserInfoType } from '../models/types';
 import { PURGE } from 'redux-persist';
 
-
 export interface UserState {
-  user: UserInfoType  | null;
-  users: UserInfoType [];
+  user: UserInfoType | undefined;
+  users: UserInfoType[];
   loading: boolean;
-  error: string | null;
-  updateStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  error: string | undefined;
 }
 
 const initialState: UserState = {
-  user: null,
+  user: undefined,
   users: [],
   loading: false,
-  error: null,
-  updateStatus: 'idle',
+  error: undefined,
 };
 
 export const fetchUsers = createAsyncThunk<UserInfoType[], void, { state: RootState }>(
@@ -44,9 +41,8 @@ export const fetchUsers = createAsyncThunk<UserInfoType[], void, { state: RootSt
   }
 );
 
-
 export const updateUserProfile = createAsyncThunk<
-UserInfoType ,
+  UserInfoType,
   { profileData: updateProfileType },
   { state: RootState }
 >(
@@ -77,7 +73,6 @@ UserInfoType ,
   }
 );
 
-
 const usersSlice = createSlice({
   name: 'userInfo',
   initialState,
@@ -93,32 +88,33 @@ const usersSlice = createSlice({
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        if (typeof action.payload === 'string') {
+          state.error = undefined;
+        }
       })
       .addCase(updateUserProfile.pending, (state) => {
-        state.updateStatus = 'loading';
-        state.error = null;
+        state.loading = true;
+        state.error = undefined;
       })
-      .addCase(updateUserProfile.fulfilled, (state, action) => {
-        state.updateStatus = 'succeeded';
+      .addCase(updateUserProfile.fulfilled, (state) => {
+        state.loading = false;
       })
       .addCase(updateUserProfile.rejected, (state, action) => {
-        state.updateStatus = 'failed';
-        state.error = action.payload as string;
+        state.loading = false;
+        if (typeof action.payload === 'string') {
+          state.error = undefined;
+        }
       })
-      .addCase(PURGE, () => initialState)
+      .addCase(PURGE, () => initialState);
   },
   selectors: {
     selectUser: (s) => s.user,
     selectUsers: (s) => s.users,
     selectLoading: (s) => s.loading,
     selectError: (s) => s.error,
-    selectUpdateStatus: (s) => s.updateStatus,
   },
-  
 });
 
-export const { selectUser, selectUsers, selectLoading, selectError, selectUpdateStatus } = usersSlice.selectors;
+export const { selectUser, selectUsers, selectLoading, selectError } = usersSlice.selectors;
 
 export default usersSlice.reducer;
-

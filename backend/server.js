@@ -28,8 +28,8 @@ const io = new Server(server, {
   }, 
 });
 
-let userSockets = {};  
-let onlineUsers = new Set();  
+const userSockets = {};  
+const onlineUsers = new Set();  
 
 io.on('connection', (socket) => {
   socket.on('userStatus', (data) => {

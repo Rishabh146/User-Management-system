@@ -4,10 +4,11 @@ import { FaRegUserCircle } from "react-icons/fa";
 import LogoutButton from '../../pages/LogOut';
 import { selectUser } from '../../Redux/authSlice';
 import { useAppSelector } from '../../Redux/Hooks';
+import {User} from '../../models/types'
 
 
 function Header() {
-   const user = useAppSelector(selectUser);
+   const user: User|undefined = useAppSelector(selectUser);
     return (
         <Box
             sx={{

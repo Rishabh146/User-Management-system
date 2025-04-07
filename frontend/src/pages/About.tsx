@@ -2,7 +2,6 @@ import React from 'react'
 import Layout from '../components/Layout/Layout'
 import { Typography, Card, CardContent, Box, Avatar, Divider, Sheet, Button, IconButton } from '@mui/joy'
 import { useState } from 'react';
-import {AxiosError} from 'axios'
 import theme from '../services/Theme';
 
 import {
@@ -26,14 +25,14 @@ function About() {
   const [message, setMessage] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>):void => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = async (): Promise<void>  => {
     dispatch(updateUserProfile({ profileData: formData }))
       .then((resultAction) => {
-        if (updateUserProfile.fulfilled.match(resultAction)) {
+        if (resultAction.meta.requestStatus === 'fulfilled') {
           setMessage("Profile updated successfully");
           setEditMode(false);
         } else {
@@ -41,10 +40,6 @@ function About() {
         }
         setSnackbarOpen(true);
       })
-      .catch((error: AxiosError) => {
-        setMessage("Update failed");
-        setSnackbarOpen(true);
-      });
   };
   
   
@@ -84,6 +79,7 @@ function About() {
                     onChange={handleChange}
                     placeholder="Name"
                     sx={{ mt: 1 }}
+                    required
                   />
                   <Input
                     fullWidth
@@ -92,6 +88,7 @@ function About() {
                     onChange={handleChange}
                     placeholder="Email"
                     sx={{ mt: 1 }}
+                    required
                   />
                   <Input
                     fullWidth

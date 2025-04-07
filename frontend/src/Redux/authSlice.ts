@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PURGE } from 'redux-persist';
-import {User} from './types'
+import {User} from '../models/types'
 import { RootState } from './store';
 import { updateUserProfile } from './usersSlice';
 
@@ -9,8 +9,8 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: undefined, 
-};
+  user: undefined
+}
 
 
 const authSlice = createSlice({

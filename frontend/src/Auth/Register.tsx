@@ -12,7 +12,7 @@ import { NavLink } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../services/AuthServices';
-import { inputstyle, Item } from './AuthStyle';
+import { inputstyle, Item, registerBox } from './AuthStyle';
 import RegisterPageImage from '../assets/images';
 import { AxiosError } from 'axios';
 import theme from '../services/Theme';
@@ -32,7 +32,7 @@ function Register() {
     age: 0,
   });
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     registerUser(formData)
       .then((res) => {
@@ -44,13 +44,13 @@ function Register() {
       .catch((error: AxiosError<{error:string}>) => {
         toast.error(error?.response?.data?.error || 'Something went wrong');
 
-        if (!error.response) {
+        if (error.request) {
           toast.error('Network or server error.');
         }
       });
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>):void => {
     const { name, value } = e.target;
     if (name === 'password') {
       setShowPasswordHint(!passwordRegex.test(value));
@@ -74,14 +74,7 @@ function Register() {
             <Grid xs={8}>
               <Item>
                 <Box
-                  sx={{
-                    maxHeight: 600,
-                    maxWidth: 490,
-                    my: 4,
-                    gap: 2,
-                    py: 2,
-                    pl: 4,
-                  }}
+                  sx={{registerBox}}
                 >
                   <Typography level="h1" sx={{ textAlign: 'center', color:theme.vars.palette.primary }}>
                     Sign Up Here
