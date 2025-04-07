@@ -4,16 +4,14 @@ export interface BaseUser {
   age: number;
   gender: string;
 }
-export interface loginCredential{
-  email:string,
-  password:string
-}
-export interface FormDataType {
-  name: string;
+
+export interface LoginCredential {
   email: string;
   password: string;
-  gender: string;
-  age: number;
+}
+
+export interface FormDataType extends BaseUser {
+  password: string;
 }
 
 export interface User extends BaseUser {
@@ -21,8 +19,10 @@ export interface User extends BaseUser {
   token: string;
 }
 
-export interface updateProfileType extends Omit<BaseUser, 'age'> {
-  age?: number;
+export interface UpdateProfileType extends Partial<Pick<BaseUser, 'age'>> {
+  name: string;
+  email: string;
+  gender: string;
 }
 
 export interface RegisterUser extends BaseUser {

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import ApiService from '../services/ApiServices'; 
 import { RootState } from './store';
-import { updateProfileType } from '../models/types';
+import { UpdateProfileType } from '../models/types';
 import { AxiosError } from 'axios';
 import { UserInfoType } from '../models/types';
 import { PURGE } from 'redux-persist';
@@ -43,7 +43,7 @@ export const fetchUsers = createAsyncThunk<UserInfoType[], void, { state: RootSt
 
 export const updateUserProfile = createAsyncThunk<
   UserInfoType,
-  { profileData: updateProfileType },
+  { profileData: UpdateProfileType },
   { state: RootState }
 >(
   "userInfo/updateProfile",
