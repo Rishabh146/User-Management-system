@@ -4,6 +4,17 @@ export interface BaseUser {
   age: number;
   gender: string;
 }
+export interface loginCredential{
+  email:string,
+  password:string
+}
+export interface FormDataType {
+  name: string;
+  email: string;
+  password: string;
+  gender: string;
+  age: number;
+}
 
 export interface User extends BaseUser {
   id: number;

@@ -16,15 +16,16 @@ import { inputstyle, Item, registerBox } from './AuthStyle';
 import RegisterPageImage from '../assets/images';
 import { AxiosError } from 'axios';
 import theme from '../services/Theme';
+import { FormDataType } from '../models/types';
 
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&[\]{}^+_#])([A-Za-z\d@$!%*?&[\]{}^+_#]{8,})$/;
 
 function Register() {
   const navigate = useNavigate();
-  const [showPasswordHint, setShowPasswordHint] = useState(false);
+  const [showPasswordHint, setShowPasswordHint] = useState<boolean>(false);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormDataType>({
     name: '',
     email: '',
     password: '',

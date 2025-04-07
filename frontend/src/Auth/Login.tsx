@@ -14,9 +14,10 @@ import { loginUser } from '../services/AuthServices';
 import { AxiosError } from 'axios';
 import { useAppDispatch } from '../Redux/Hooks';
 import theme from '../services/Theme';
+import { loginCredential } from '../models/types';
 
 function Login() {
-  const [formData, setFormData] = useState<{ email: string; password: string }>({
+  const [formData, setFormData] = useState<loginCredential>({
     email: '',
     password: '',
   });

@@ -10,13 +10,13 @@ import {
 import { selectUser } from '../Redux/authSlice';
 import { updateUserProfile } from '../Redux/usersSlice';
 import { useAppDispatch, useAppSelector } from '../Redux/Hooks';
-import { updateProfileType } from '../models/types';
+import { updateProfileType, User } from '../models/types';
 import toast from 'react-hot-toast';
 
 function About() {
   const dispatch = useAppDispatch();
-  const user = useAppSelector(selectUser);
-  const [editMode, setEditMode] = useState(false);
+  const user: User|undefined = useAppSelector(selectUser);
+  const [editMode, setEditMode] = useState<boolean>(false);
   const [formData, setFormData] = useState<updateProfileType>({
     name: user?.name || '',
     email: user?.email || '',

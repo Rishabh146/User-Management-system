@@ -5,12 +5,10 @@ import { RootState } from './store';
 import { updateUserProfile } from './usersSlice';
 
 export interface AuthState {
-  user: User | undefined; 
+  user?: User; 
 }
 
-const initialState: AuthState = {
-  user: undefined
-}
+const initialState: AuthState = {}
 
 
 const authSlice = createSlice({

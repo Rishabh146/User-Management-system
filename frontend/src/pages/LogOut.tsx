@@ -7,11 +7,12 @@ import {selectUser } from "../Redux/authSlice";
 import { socket } from "../services/Socket";
 import { useAppSelector } from "../Redux/Hooks";
 import theme from "../services/Theme";
+import { User } from "../models/types";
 
 
 const LogoutButton: React.FC = () => {
   const navigate = useNavigate();
-  const user = useAppSelector(selectUser); 
+  const user : User|undefined = useAppSelector(selectUser); 
   const userId=user?.id
 
   const handleLogout = () => {

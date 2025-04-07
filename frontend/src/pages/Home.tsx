@@ -21,12 +21,12 @@ function Home() {
   const users:UserInfoType []|undefined  = useAppSelector(selectUsers);
   const loading: boolean = useAppSelector(selectLoading);
   const error: string|undefined = useAppSelector(selectError);
-  console.log("error value is:", error)
   const userStatuses: Record<string,string> = useAppSelector(selectUserStatus);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (user?.token) {
+    if (!user?.token) return
+    else{
       dispatch(fetchUsers());
     }
   }, [dispatch, user?.token]);
