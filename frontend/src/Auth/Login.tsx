@@ -5,7 +5,7 @@ import FormControl from '@mui/joy/FormControl';
 import Layout from '../components/Layout/Layout';
 import Link from '@mui/joy/Link';
 import { Typography } from '@mui/joy';
-import {useState } from 'react';
+import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { setUser } from '../Redux/authSlice';
 import { toast } from 'react-hot-toast';
@@ -13,13 +13,13 @@ import { inputstyle, loginBox } from './AuthStyle';
 import { loginUser } from '../services/AuthServices';
 import { AxiosError } from 'axios';
 import { useAppDispatch } from '../Redux/Hooks';
+import theme from '../services/Theme';
+
 function Login() {
-  const [formData, setFormData] = useState<{ email: string; password: string }>(
-    {
-      email: '',
-      password: '',
-    }
-  );
+  const [formData, setFormData] = useState<{ email: string; password: string }>({
+    email: '',
+    password: '',
+  });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -43,6 +43,7 @@ function Login() {
         toast.error(err?.response?.data?.error ?? 'Incorrect login credentials.');
       });
   };
+
   return (
     <Layout tittle={'Login'}>
       <div>
@@ -74,7 +75,6 @@ function Login() {
                 required
               />
             </FormControl>
-
             <Box>
               <Button
                 size="lg"
@@ -90,7 +90,7 @@ function Login() {
                 component={NavLink}
                 to="/register"
                 underline="none"
-                sx={{ color: 'primary.500', p: 1 }}
+                sx={{ color: theme.vars.palette.primary, p: 1 }}
               >
                 Register
               </Link>

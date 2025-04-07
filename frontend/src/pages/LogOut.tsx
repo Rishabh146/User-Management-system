@@ -6,28 +6,30 @@ import Button from "@mui/joy/Button";
 import {selectUser } from "../Redux/authSlice";
 import { socket } from "../services/Socket";
 import { useAppSelector } from "../Redux/Hooks";
+import theme from "../services/Theme";
 
 
 const LogoutButton: React.FC = () => {
   const navigate = useNavigate();
   const user = useAppSelector(selectUser); 
   const userId=user?.id
+
   const handleLogout = () => {
     if (userId) {
       socket.emit('logout', userId);
     }
-    persistor.purge().then((res)=> {
-
-      navigate("/login", {replace: true});
+  
+    persistor.purge().then(() => {
+      navigate("/login", { replace: true });
       toast.success("User Logout Successfully");
-    }).catch(()=>{
-      console.log('some error occures')
+    }).catch(() => {
+      console.log('Some error occurred');
     });
-    
   };
+  
 
   return (
-    <Button onClick={handleLogout} color="danger" variant="solid">
+    <Button onClick={handleLogout} sx={{ color: theme.vars.palette.danger}} variant="solid">
       Logout
     </Button>
   );
