@@ -95,12 +95,6 @@ export const updateUserProfileControler = async (req, res) => {
         error: 'User not found',
       });
     }
-
-    if (email && email !== user.email) {
-      return res.status(400).send({
-        error: 'Email cannot be changed',
-      });
-    }
     const updatedUser = await userModels.findByIdAndUpdate(
       userId,
       {
