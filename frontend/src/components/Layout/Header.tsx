@@ -1,6 +1,5 @@
 import { Box, Typography, Link } from '@mui/joy';
 import { NavLink} from 'react-router-dom';
-import { FaRegUserCircle } from "react-icons/fa";
 import LogoutButton from '../../pages/LogOut';
 import { selectUser } from '../../Redux/authSlice';
 import { useAppSelector } from '../../Redux/Hooks';
@@ -23,7 +22,7 @@ function Header() {
         >
             <Typography level="h4">
                 <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
-                    <FaRegUserCircle style={{ marginRight: '3px' }} />
+                    
                     MyApp
                 </Box>
             </Typography>

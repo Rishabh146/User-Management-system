@@ -24,7 +24,7 @@ function Layout({ children, tittle }: LayoutProps) {
         <title>{tittle}</title>
       </Helmet>
       <Header />
-      <Box component="main" sx={{ minHeight: '76vh' }}>
+      <Box component="main" sx={{ minHeight: '86vh' }}>
         {children}
       </Box>
       <Footer/>

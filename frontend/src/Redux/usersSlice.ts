@@ -10,14 +10,12 @@ export interface UserState {
   user: UserInfoType | undefined;
   users: UserInfoType[];
   loading: boolean;
-  error: string | undefined;
 }
 
 const initialState: UserState = {
   user: undefined,
   users: [],
   loading: false,
-  error: undefined,
 };
 
 export const fetchUsers = createAsyncThunk<UserInfoType[], void, { state: RootState }>(
@@ -88,22 +86,15 @@ const usersSlice = createSlice({
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;
-        if (typeof action.payload === 'string') {
-          state.error = undefined;
-        }
       })
       .addCase(updateUserProfile.pending, (state) => {
         state.loading = true;
-        state.error = undefined;
       })
       .addCase(updateUserProfile.fulfilled, (state) => {
         state.loading = false;
       })
       .addCase(updateUserProfile.rejected, (state, action) => {
         state.loading = false;
-        if (typeof action.payload === 'string') {
-          state.error = undefined;
-        }
       })
       .addCase(PURGE, () => initialState);
   },
@@ -111,10 +102,9 @@ const usersSlice = createSlice({
     selectUser: (s) => s.user,
     selectUsers: (s) => s.users,
     selectLoading: (s) => s.loading,
-    selectError: (s) => s.error,
   },
 });
 
-export const { selectUser, selectUsers, selectLoading, selectError } = usersSlice.selectors;
+export const { selectUser, selectUsers, selectLoading } = usersSlice.selectors;
 
 export default usersSlice.reducer;

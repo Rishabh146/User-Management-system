@@ -11,11 +11,6 @@ class ApiService {
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
   }
-
-  setToken(token: string) {
-    this.api.defaults.headers.Authorization = `Bearer ${token}`;
-  }
-
   get(endpoint: string, params = {}) {
     return this.api
       .get(endpoint, { params })

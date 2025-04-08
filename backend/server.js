@@ -2,17 +2,15 @@ import express from 'express';
 import connectDb from './config/db.js';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoute.js';
-import morgan from 'morgan';
 import cors from 'cors';
-import http from 'http';  
-import { Server } from 'socket.io'; 
+import http from 'http';
+import { Server } from 'socket.io';
 
 dotenv.config();
 const app = express();
 
 connectDb();
 app.use(express.json());
-app.use(morgan('dev'));
 app.use(
   cors({
     allowedHeaders: ['Authorization', 'Content-Type'],
@@ -25,11 +23,11 @@ const io = new Server(server, {
     origin: 'http://localhost:4200',
     methods: ['GET', 'POST'],
     credentials: true,
-  }, 
+  },
 });
 
-const userSockets = {};  
-const onlineUsers = new Set();  
+const userSockets = {};
+const onlineUsers = new Set();
 
 io.on('connection', (socket) => {
   socket.on('userStatus', (data) => {
@@ -40,10 +38,10 @@ io.on('connection', (socket) => {
         userSockets[userId] = [];
       }
       userSockets[userId].push(socket.id);
-      onlineUsers.add(userId); 
+      onlineUsers.add(userId);
       io.emit('statusUpdate', { userId, status });
 
-      const otherOnlineUsers = Array.from(onlineUsers)
+      const otherOnlineUsers = Array.from(onlineUsers);
       socket.emit('initialOnlineUsers', otherOnlineUsers);
     }
   });
@@ -51,7 +49,6 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     let userId = null;
 
-    
     for (const [key, socketIds] of Object.entries(userSockets)) {
       if (socketIds.includes(socket.id)) {
         userId = key;
@@ -60,10 +57,12 @@ io.on('connection', (socket) => {
     }
 
     if (userId) {
-      userSockets[userId] = userSockets[userId].filter(id => id !== socket.id);
+      userSockets[userId] = userSockets[userId].filter(
+        (id) => id !== socket.id
+      );
       if (userSockets[userId].length === 0) {
         delete userSockets[userId];
-        onlineUsers.delete(userId);  
+        onlineUsers.delete(userId);
         io.emit('statusUpdate', { userId, status: 'offline' });
       }
     }
@@ -85,8 +84,3 @@ const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
   console.log(`App is running on port ${PORT}`);
 });
-
-
-
-
-

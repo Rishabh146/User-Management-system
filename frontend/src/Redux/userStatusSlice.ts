@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PURGE } from "redux-persist";
+import { statusUpdateType } from "../models/types";
 
 interface UserStatusState {
   statuses: Record<string, string>;
@@ -15,7 +16,7 @@ const userStatusSlice = createSlice({
   reducers: {
     updateUserStatus: (
       state,
-      action: PayloadAction<{ userId: string; status: string }>
+      action: PayloadAction<statusUpdateType>
     ) => {
       state.statuses[action.payload.userId] = action.payload.status;
     },
@@ -23,10 +24,7 @@ const userStatusSlice = createSlice({
       action.payload.forEach((userId) => {
         state.statuses[userId] = "online";
       });
-    },
-    clearUserStatus: (state, action: PayloadAction<string>) => {
-      delete state.statuses[action.payload];
-    },
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(PURGE, () => initialState);
@@ -36,6 +34,6 @@ const userStatusSlice = createSlice({
   },
 });
 
-export const { updateUserStatus, setInitialOnlineUsers, clearUserStatus } = userStatusSlice.actions;
+export const { updateUserStatus, setInitialOnlineUsers} = userStatusSlice.actions;
 export const { selectUserStatus } = userStatusSlice.selectors;
 export default userStatusSlice.reducer;

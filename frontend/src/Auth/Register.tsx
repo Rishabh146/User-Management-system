@@ -1,10 +1,3 @@
-import Button from '@mui/joy/Button';
-import Grid from '@mui/joy/Grid';
-import Box from '@mui/joy/Box';
-import Input from '@mui/joy/Input';
-import FormControl from '@mui/joy/FormControl';
-import Link from '@mui/joy/Link';
-import { Typography } from '@mui/joy';
 import Layout from '../components/Layout/Layout';
 import { FormEvent, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -17,6 +10,16 @@ import RegisterPageImage from '../assets/images';
 import { AxiosError } from 'axios';
 import theme from '../services/Theme';
 import { FormDataType } from '../models/types';
+import {
+  Box,
+  Button,
+  Grid,
+  Input,
+  FormControl,
+  Link,
+  Typography
+} from '@mui/joy';
+
 
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&[\]{}^+_#])([A-Za-z\d@$!%*?&[\]{}^+_#]{8,})$/;
@@ -37,10 +40,8 @@ function Register() {
     e.preventDefault();
     registerUser(formData)
       .then((res) => {
-        if (res.status === 200 || res.status === 201) {
           toast.success('User registered successfully');
           navigate('/login');
-        }
       })
       .catch((error: AxiosError<{error:string}>) => {
         toast.error(error?.response?.data?.error || 'Something went wrong');

@@ -10,10 +10,10 @@ export const inputstyle = {
 export const loginBox = {
     maxHeight: 500,
     maxWidth: 400,
-    ml: 80,
-    mt: 10,
+    mt:30,
     boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.3)',
     borderRadius: 4,
+    display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection:'column'
 }
 
 export const registerBox = {

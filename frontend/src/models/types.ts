@@ -33,3 +33,8 @@ export interface UserInfoType extends User {
   _id: string;
   status: string;
 }
+
+export interface statusUpdateType{
+  userId: string; 
+  status: string
+}

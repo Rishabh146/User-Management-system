@@ -1,10 +1,3 @@
-import Button from '@mui/joy/Button';
-import Box from '@mui/joy/Box';
-import Input from '@mui/joy/Input';
-import FormControl from '@mui/joy/FormControl';
-import Layout from '../components/Layout/Layout';
-import Link from '@mui/joy/Link';
-import { Typography } from '@mui/joy';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { setUser } from '../Redux/authSlice';
@@ -15,6 +8,8 @@ import { AxiosError } from 'axios';
 import { useAppDispatch } from '../Redux/Hooks';
 import theme from '../services/Theme';
 import { LoginCredential } from '../models/types';
+import { Box, Button, Input, FormControl, Link, Typography } from '@mui/joy';
+import Layout from '../components/Layout/Layout';
 
 function Login() {
   const [formData, setFormData] = useState<LoginCredential>({
@@ -24,7 +19,7 @@ function Login() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>):void => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -32,7 +27,7 @@ function Login() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void=> {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     loginUser(formData.email, formData.password)
       .then((user) => {
@@ -41,17 +36,21 @@ function Login() {
         navigate('/');
       })
       .catch((err: AxiosError<{ error: string }>) => {
-        toast.error(err?.response?.data?.error ?? 'Incorrect login credentials.');
+        toast.error(
+          err?.response?.data?.error ?? 'Incorrect login credentials.'
+        );
 
-        if(err.request){
-          toast.error("Network or server error")
+        if (AxiosError.ERR_NETWORK) {
+          toast.error('Network or server error');
         }
       });
   };
 
   return (
     <Layout tittle={'Login'}>
-      <div>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection:'column'}}
+      >
         <Typography sx={{ textAlign: 'center', m: 2 }}></Typography>
         <form onSubmit={handleSubmit}>
           <Box sx={loginBox}>
@@ -102,7 +101,7 @@ function Login() {
             </Typography>
           </Box>
         </form>
-      </div>
+      </Box>
     </Layout>
   );
 }

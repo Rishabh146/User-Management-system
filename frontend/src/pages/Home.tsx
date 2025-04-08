@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import Layout from '../components/Layout/Layout';
 import { fetchUsers } from '../Redux/usersSlice';
-import { selectUsers, selectLoading, selectError } from '../Redux/usersSlice';
+import { selectUsers, selectLoading} from '../Redux/usersSlice';
 import CircularProgress from '@mui/joy/CircularProgress';
-import { Alert, Box, Table, Typography } from '@mui/joy';
+import { Box, Table, Typography } from '@mui/joy';
 import Chip from '@mui/joy/Chip';
 import { selectUser } from '../Redux/authSlice';
 import { socket } from '../services/Socket';
@@ -14,22 +14,24 @@ import {
 } from '../Redux/userStatusSlice';
 import { useAppDispatch, useAppSelector } from '../Redux/Hooks';
 import theme from '../services/Theme';
-import { User, UserInfoType } from '../models/types';
+import { statusUpdateType, User, UserInfoType } from '../models/types';
+import toast from 'react-hot-toast';
 
 function Home() {
   const user:User|undefined = useAppSelector(selectUser);
   const users:UserInfoType []|undefined  = useAppSelector(selectUsers);
   const loading: boolean = useAppSelector(selectLoading);
-  const error: string|undefined = useAppSelector(selectError);
   const userStatuses: Record<string,string> = useAppSelector(selectUserStatus);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!user?.token) return
-    else{
-      dispatch(fetchUsers());
-    }
-  }, [dispatch, user?.token]);
+    if (!user) return
+    dispatch(fetchUsers()).then((resultAction) => {
+      if (resultAction.meta.requestStatus !== 'fulfilled') {
+        toast.error('Failed to load users.');
+      } 
+    });
+  }, [dispatch, user]);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -45,7 +47,7 @@ function Home() {
       socket.once('connect', emitStatus);
     }
 
-    socket.on('statusUpdate', (data: { userId: string; status: string }) => {
+    socket.on('statusUpdate', (data: statusUpdateType) => { 
       dispatch(updateUserStatus({ userId: data.userId, status: data.status }));
     });
 
@@ -70,8 +72,6 @@ function Home() {
         <div>
           {loading ? (
             <CircularProgress sx={{ color: theme.vars.palette.primary }} />
-          ) : error ? (
-            <Alert sx={{ color: theme.vars.palette.danger }}>{error}</Alert>
           ) : users.length === 0 ? (
             <Typography>No users available.</Typography>
           ) : (
