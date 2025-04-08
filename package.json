@@ -52,7 +52,6 @@
     "@mui/joy": "^5.0.0-beta.51",
     "@mui/material": "^6.4.8",
     "@reduxjs/toolkit": "^2.6.1",
-    "dotenv": "^16.4.7",
     "engine.io-client": "^6.6.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -61,7 +60,6 @@
     "react-icons": "^5.5.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.29.0",
-    "react-toastify": "^11.0.5",
     "redux-persist": "^6.0.0",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1"

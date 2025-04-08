@@ -1,7 +1,7 @@
 
 import { Navigate} from "react-router-dom";
 import { FC, ReactNode } from "react";
-import { User } from "../Redux/types";
+import { User } from "../models/types";
 
 interface ProtectedRouteProps {
     children: ReactNode;

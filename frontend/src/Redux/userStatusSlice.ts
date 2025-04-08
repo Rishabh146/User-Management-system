@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "./store";
 import { PURGE } from "redux-persist";
 
 interface UserStatusState {
@@ -29,17 +28,14 @@ const userStatusSlice = createSlice({
       delete state.statuses[action.payload];
     },
   },
-  extraReducers(builder) {
-      builder
-      .addCase(PURGE, () => initialState)
-     
-    },
-
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => initialState);
+  },
+  selectors: {
+    selectUserStatus: (state) => state.statuses,
+  },
 });
 
 export const { updateUserStatus, setInitialOnlineUsers, clearUserStatus } = userStatusSlice.actions;
-export const selectUserStatus = (state: RootState) => state.userStatus.statuses;
+export const { selectUserStatus } = userStatusSlice.selectors;
 export default userStatusSlice.reducer;
-
-
-

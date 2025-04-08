@@ -6,8 +6,7 @@ export const requireSignIn = async (req, res, next) => {
   
       if (!authHeader.startsWith('Bearer ')) {
         return res.status(401).send({
-          success: false,
-          message: 'Unauthorized: Token missing or incorrect format',
+          error: 'Unauthorized: Token missing or incorrect format',
         });
       }
       const token = authHeader.split(' ')[1];
@@ -16,8 +15,7 @@ export const requireSignIn = async (req, res, next) => {
       next(); 
     } catch (error) {
       res.status(401).send({
-        success: false,
-        message: 'Unauthorized: Invalid or expired token',
+        error: 'Unauthorized: Invalid or expired token',
       });
     }
   };
@@ -29,9 +27,7 @@ export const isAdmin= async(req,res,next)=>{
 
         if(user.role[0]==='admin'||user.role[1]==='admin'){
             res.status(401).send({
-                success:false,
-                message:"unothrized User",
-                error
+                error:"unauthrized user"
             })
         }
         else{
@@ -40,8 +36,7 @@ export const isAdmin= async(req,res,next)=>{
         
     } catch (error) {
         res.status(401).send({
-            success:false,
-            message:"error in the authorization"
+           error:"error in the authrization"
         })
     }
 }

@@ -14,16 +14,17 @@ import { loginUser } from '../services/AuthServices';
 import { AxiosError } from 'axios';
 import { useAppDispatch } from '../Redux/Hooks';
 import theme from '../services/Theme';
+import { LoginCredential } from '../models/types';
 
 function Login() {
-  const [formData, setFormData] = useState<{ email: string; password: string }>({
+  const [formData, setFormData] = useState<LoginCredential>({
     email: '',
     password: '',
   });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>):void => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -31,7 +32,7 @@ function Login() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void=> {
     e.preventDefault();
     loginUser(formData.email, formData.password)
       .then((user) => {
@@ -41,6 +42,10 @@ function Login() {
       })
       .catch((err: AxiosError<{ error: string }>) => {
         toast.error(err?.response?.data?.error ?? 'Incorrect login credentials.');
+
+        if(err.request){
+          toast.error("Network or server error")
+        }
       });
   };
 

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import Layout from '../components/Layout/Layout';
-import { RootState } from '../Redux/store';
 import { fetchUsers } from '../Redux/usersSlice';
 import { selectUsers, selectLoading, selectError } from '../Redux/usersSlice';
 import CircularProgress from '@mui/joy/CircularProgress';
@@ -11,23 +10,23 @@ import { socket } from '../services/Socket';
 import {
   updateUserStatus,
   setInitialOnlineUsers,
+  selectUserStatus,
 } from '../Redux/userStatusSlice';
 import { useAppDispatch, useAppSelector } from '../Redux/Hooks';
 import theme from '../services/Theme';
-import { text } from 'stream/consumers';
+import { User, UserInfoType } from '../models/types';
 
 function Home() {
-  const user = useAppSelector(selectUser);
-  const users = useAppSelector(selectUsers);
-  const loading = useAppSelector(selectLoading);
-  const error = useAppSelector(selectError);
-  const userStatuses = useAppSelector(
-    (state: RootState) => state.userStatus.statuses
-  );
+  const user:User|undefined = useAppSelector(selectUser);
+  const users:UserInfoType []|undefined  = useAppSelector(selectUsers);
+  const loading: boolean = useAppSelector(selectLoading);
+  const error: string|undefined = useAppSelector(selectError);
+  const userStatuses: Record<string,string> = useAppSelector(selectUserStatus);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (user?.token) {
+    if (!user?.token) return
+    else{
       dispatch(fetchUsers());
     }
   }, [dispatch, user?.token]);
@@ -74,7 +73,7 @@ function Home() {
           ) : error ? (
             <Alert sx={{ color: theme.vars.palette.danger }}>{error}</Alert>
           ) : users.length === 0 ? (
-            <Alert>No users available.</Alert>
+            <Typography>No users available.</Typography>
           ) : (
             <Box
               sx={{

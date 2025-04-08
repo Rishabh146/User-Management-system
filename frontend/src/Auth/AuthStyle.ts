@@ -22,7 +22,12 @@ export const registerBox = {
     ml: 45,
     mt: 10,
     borderRadius: 3,
-     gridTemplateColumns: `repeat(2, 1fr)`
+    maxHeight: 600,
+    my: 4,
+    gap: 2,
+    py: 2,
+    pl: 4,
+    gridTemplateColumns: `repeat(2, 1fr)`
 }
 export const Item = styled(Sheet)(({ theme }) => ({
   backgroundColor: theme.palette.background.surface,

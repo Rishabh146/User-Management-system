@@ -1,6 +1,6 @@
-import { comparePassword, hashPassword } from "../helpers/authHelper.js";
-import userModels from "../models/userModels.js";
-import JWT from 'jsonwebtoken'
+import { comparePassword, hashPassword } from '../helpers/authHelper.js';
+import userModels from '../models/userModels.js';
+import JWT from 'jsonwebtoken';
 
 export const registerController = async (req, res) => {
   try {
@@ -8,15 +8,23 @@ export const registerController = async (req, res) => {
 
     if (!name || !email || !password) {
       return res.status(400).send({
-        error: !name ? "Name is required" : !email ? "Email is required" : "Password is required"
+        error: 'Required filled is missing',
       });
     }
     const existingUser = await userModels.findOne({ email });
     if (existingUser) {
-      return res.status(409).send({ error: "User already exists. Please login" });
+      return res
+        .status(409)
+        .send({ error: 'User already exists. Please login' });
     }
     const hashedPassword = await hashPassword(password);
-    const user = await new userModels({ name, email, age, gender, password: hashedPassword }).save();
+    const user = await new userModels({
+      name,
+      email,
+      age,
+      gender,
+      password: hashedPassword,
+    }).save();
     return res.status(201).send({
       user: {
         name: user.name,
@@ -26,65 +34,69 @@ export const registerController = async (req, res) => {
         id: user._id,
       },
     });
-
   } catch (error) {
     return res.status(500).send({
-      error: error.message || "Error in registration",
+      error: error.message || 'Error in registration',
     });
   }
 };
 
-
 export const loginController = async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).send({ error: 'Invalid email or password' });
+  }
   try {
-      const { email, password } = req.body;
-      if (!email || !password) {
-          return res.status(400).send({ error: "Invalid email or password" });
-      }
-      const user = await userModels.findOne({ email });
-      if (!user) {
-          return res.status(404).send({ error: "User has not registered" });
-      }
+    const user = await userModels.findOne({ email });
+    if (!user) {
+      return res.status(404).send({ error: 'User has not registered' });
+    }
 
-      const match = await comparePassword(password, user.password);
-      if (!match) {
-          return res.status(401).send({ error: "Invalid login credentials" });
-      }
-      const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-      return res.status(200).send({
-          user: {
-              name: user.name,
-              email: user.email,
-              gender: user.gender,
-              age: user.age,
-              id: user._id,
-              token
-          },
-      });
-
+    const match = await comparePassword(password, user.password);
+    if (!match) {
+      return res.status(401).send({ error: 'Invalid login credentials' });
+    }
+    const token = JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '7d',
+    });
+    return res.status(200).send({
+      user: {
+        name: user.name,
+        email: user.email,
+        gender: user.gender,
+        age: user.age,
+        id: user._id,
+        token,
+      },
+    });
   } catch (error) {
-      return res.status(500).send({
-          error: error.message || "Error in login"
-      });
+    return res.status(500).send({
+      error: error.message || 'Error in login',
+    });
   }
 };
 
-
-
 export const updateUserProfileControler = async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  const token = req.headers.authorization?.split(' ')[1];
 
   try {
-    if (!req.user || !req.user._id) {
+    if (!token) {
       return res.status(401).send({
-        error: "Unauthorized: User not authenticated",
+        error: 'Unauthorized: No token provided',
       });
     }
+    const decoded = JWT.verify(token, process.env.JWT_SECRET);
+    const userId = decoded._id;
 
     const { name, email, age, gender } = req.body;
-    const user = await userModels.findById(req.user._id);
+    const user = await userModels.findById(userId);
+    if (!user) {
+      return res.status(404).send({
+        error: 'User not found',
+      });
+    }
     const updatedUser = await userModels.findByIdAndUpdate(
-      req.user._id,
+      userId,
       {
         name: name || user.name,
         email: email || user.email,
@@ -98,12 +110,10 @@ export const updateUserProfileControler = async (req, res) => {
     });
   } catch (error) {
     res.status(400).send({
-      error: "Error While Updating Profile",
+      error: 'Error While Updating Profile',
     });
   }
 };
-
-  
 
 export const getAllUsersController = async (req, res) => {
   try {
@@ -113,13 +123,8 @@ export const getAllUsersController = async (req, res) => {
     });
   } catch (error) {
     res.status(500).send({
-      error: "Error fetching users",
+      error: 'Error fetching users',
     });
   }
 };
 
-  
-
-  export const testMiddleware=(req,res)=>{
-      return res.send("Protected Route")
-  }
