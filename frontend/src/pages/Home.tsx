@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Layout from '../components/Layout/Layout';
 import { fetchUsers } from '../Redux/usersSlice';
-import { selectUsers, selectLoading} from '../Redux/usersSlice';
+import { selectUsers, selectLoading } from '../Redux/usersSlice';
 import CircularProgress from '@mui/joy/CircularProgress';
 import { Box, Table, Typography } from '@mui/joy';
 import Chip from '@mui/joy/Chip';
@@ -18,18 +18,18 @@ import { statusUpdateType, User, UserInfoType } from '../models/types';
 import toast from 'react-hot-toast';
 
 function Home() {
-  const user:User|undefined = useAppSelector(selectUser);
-  const users:UserInfoType []|undefined  = useAppSelector(selectUsers);
+  const user: User | undefined = useAppSelector(selectUser);
+  const users: UserInfoType[] | undefined = useAppSelector(selectUsers);
   const loading: boolean = useAppSelector(selectLoading);
-  const userStatuses: Record<string,string> = useAppSelector(selectUserStatus);
+  const userStatuses: Record<string, string> = useAppSelector(selectUserStatus);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!user) return
+    if (!user) return;
     dispatch(fetchUsers()).then((resultAction) => {
       if (resultAction.meta.requestStatus !== 'fulfilled') {
         toast.error('Failed to load users.');
-      } 
+      }
     });
   }, [dispatch, user]);
 
@@ -45,7 +45,7 @@ function Home() {
       socket.emit('userStatus', { userId: user.id, status: 'online' });
     }
 
-    socket.on('statusUpdate', (data: statusUpdateType) => { 
+    socket.on('statusUpdate', (data: statusUpdateType) => {
       dispatch(updateUserStatus({ userId: data.userId, status: data.status }));
     });
 
@@ -63,7 +63,7 @@ function Home() {
   return (
     <Layout tittle={'Home'}>
       <Typography level="h2" sx={{ textAlign: 'center', my: 2 }}>
-        Welcome {user?.name}, check out who's online 
+        Welcome {user?.name}, check out who's online
       </Typography>
 
       {user ? (

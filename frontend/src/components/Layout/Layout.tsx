@@ -1,7 +1,7 @@
-import { ReactNode} from 'react';
+import { ReactNode } from 'react';
 import Header from './Header';
 import { Box } from '@mui/joy';
-import { Helmet } from "react-helmet";
+import { Helmet } from 'react-helmet';
 import { Toaster } from 'react-hot-toast';
 import Footer from './Footer';
 type LayoutProps = {
@@ -10,15 +10,17 @@ type LayoutProps = {
 };
 
 function Layout({ children, tittle }: LayoutProps) {
-
   return (
     <>
-      <Toaster position="top-center" containerStyle={{
-        top: 20,
-        left: 20,
-        bottom: 20,
-        right: 20,
-      }} />
+      <Toaster
+        position="top-center"
+        containerStyle={{
+          top: 20,
+          left: 20,
+          bottom: 20,
+          right: 20,
+        }}
+      />
       <Helmet>
         <meta charSet="utf-8" />
         <title>{tittle}</title>
@@ -27,7 +29,7 @@ function Layout({ children, tittle }: LayoutProps) {
       <Box component="main" sx={{ minHeight: '86vh' }}>
         {children}
       </Box>
-      <Footer/>
+      <Footer />
     </>
   );
 }

@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
-import authReducer  from './authSlice';
-import userReducer from './usersSlice'; 
-import userStatusReducer from './userStatusSlice'
+import authReducer from './authSlice';
+import userReducer from './usersSlice';
+import userStatusReducer from './userStatusSlice';
 import {
   persistStore,
   persistReducer,
@@ -16,16 +16,15 @@ import {
 import storage from 'redux-persist/lib/storage';
 
 const rootReducer = combineReducers({
-  auth: authReducer, 
-  userInfo: userReducer, 
+  auth: authReducer,
+  userInfo: userReducer,
   userStatus: userStatusReducer,
 });
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth'], 
-
+  whitelist: ['auth'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -44,4 +43,3 @@ export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-

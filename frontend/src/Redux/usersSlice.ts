@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import ApiService from '../services/ApiServices'; 
+import ApiService from '../services/ApiServices';
 import { RootState } from './store';
 import { UpdateProfileType } from '../models/types';
 import { AxiosError } from 'axios';
@@ -18,55 +18,54 @@ const initialState: UserState = {
   loading: false,
 };
 
-export const fetchUsers = createAsyncThunk<UserInfoType[], void, { state: RootState }>(
-  "userInfo/fetchUsers",
-  async (_, { getState, rejectWithValue }) => {
-    const state = getState();
-    const token = state.auth?.user?.token;
+export const fetchUsers = createAsyncThunk<
+  UserInfoType[],
+  void,
+  { state: RootState }
+>('userInfo/fetchUsers', async (_, { getState, rejectWithValue }) => {
+  const state = getState();
+  const token = state.auth?.user?.token;
 
-    if (!token) {
-      return rejectWithValue("Token not found");
-    }
-
-    const apiService = new ApiService(token);
-
-    return apiService
-      .get("/auth/all-users")
-      .then((data) => data.users)
-      .catch((error: AxiosError) =>
-        rejectWithValue(error.response?.data || "Failed to fetch users")
-      );
+  if (!token) {
+    return rejectWithValue('Token not found');
   }
-);
+
+  const apiService = new ApiService(token);
+
+  return apiService
+    .get('/auth/all-users')
+    .then((data) => data.users)
+    .catch((error: AxiosError) =>
+      rejectWithValue(error.response?.data || 'Failed to fetch users')
+    );
+});
 
 export const updateUserProfile = createAsyncThunk<
   UserInfoType,
   { profileData: UpdateProfileType },
   { state: RootState }
 >(
-  "userInfo/updateProfile",
+  'userInfo/updateProfile',
   ({ profileData }, { getState, rejectWithValue }) => {
     const state = getState();
     const token = state.auth.user?.token;
 
     if (!token) {
-      return Promise.reject(rejectWithValue("Token not found"));
+      return Promise.reject(rejectWithValue('Token not found'));
     }
 
     const apiService = new ApiService(token);
 
     return apiService
-      .put("/auth/update-profile", profileData)
+      .put('/auth/update-profile', profileData)
       .then((data) => {
         if (!data.updatedUser) {
-          return rejectWithValue("No user data returned from API");
+          return rejectWithValue('No user data returned from API');
         }
         return data.updatedUser;
       })
       .catch((error: AxiosError) => {
-        return rejectWithValue(
-          error.response?.data || "Profile update failed"
-        );
+        return rejectWithValue(error.response?.data || 'Profile update failed');
       });
   }
 );

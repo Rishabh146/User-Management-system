@@ -34,7 +34,7 @@ export interface UserInfoType extends User {
   status: string;
 }
 
-export interface statusUpdateType{
-  userId: string; 
-  status: string
+export interface statusUpdateType {
+  userId: string;
+  status: string;
 }

@@ -15,7 +15,7 @@ class ApiService {
     return this.api
       .get(endpoint, { params })
       .then((response) => response.data)
-      .catch((error:AxiosError) => {
+      .catch((error: AxiosError) => {
         throw error.response?.data || error.message;
       });
   }
@@ -24,7 +24,7 @@ class ApiService {
     return this.api
       .post(endpoint, data)
       .then((response) => response.data)
-      .catch((error:AxiosError) => {
+      .catch((error: AxiosError) => {
         throw error.response?.data || error.message;
       });
   }
@@ -36,7 +36,7 @@ class ApiService {
         console.log('response:', response.data);
         return response.data;
       })
-      .catch((error:AxiosError) => {
+      .catch((error: AxiosError) => {
         throw error.response?.data || error.message;
       });
   }
@@ -45,7 +45,7 @@ class ApiService {
     return this.api
       .patch(endpoint, data)
       .then((response) => response.data)
-      .catch((error:AxiosError) => {
+      .catch((error: AxiosError) => {
         throw error.response?.data || error.message;
       });
   }
@@ -54,7 +54,7 @@ class ApiService {
     return this.api
       .delete(endpoint)
       .then((response) => response.data)
-      .catch((error:AxiosError) => {
+      .catch((error: AxiosError) => {
         throw error.response?.data || error.message;
       });
   }

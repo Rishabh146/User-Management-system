@@ -49,7 +49,12 @@ function Login() {
   return (
     <Layout tittle={'Login'}>
       <Box
-        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection:'column'}}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}
       >
         <Typography sx={{ textAlign: 'center', m: 2 }}></Typography>
         <form onSubmit={handleSubmit}>
