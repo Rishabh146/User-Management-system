@@ -36,15 +36,13 @@ function Home() {
   useEffect(() => {
     if (!user?.id) return;
 
-    const emitStatus = () => {
-      socket.emit('userStatus', { userId: user.id, status: 'online' });
-    };
-
-    if (socket.connected) {
-      emitStatus();
-    } else {
+    if (!socket.connected) {
       socket.connect();
-      socket.once('connect', emitStatus);
+      socket.once('connect', () => {
+        socket.emit('userStatus', { userId: user.id, status: 'online' });
+      });
+    } else {
+      socket.emit('userStatus', { userId: user.id, status: 'online' });
     }
 
     socket.on('statusUpdate', (data: statusUpdateType) => { 

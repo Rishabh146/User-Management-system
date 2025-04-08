@@ -36,12 +36,12 @@ function Login() {
         navigate('/');
       })
       .catch((err: AxiosError<{ error: string }>) => {
-        toast.error(
-          err?.response?.data?.error ?? 'Incorrect login credentials.'
-        );
-
-        if (AxiosError.ERR_NETWORK) {
-          toast.error('Network or server error');
+        if (err.code === AxiosError.ERR_NETWORK) {
+          toast.error('Network error. Please check your internet connection.');
+        } else {
+          toast.error(
+            err?.response?.data?.error ?? 'Incorrect login credentials.'
+          );
         }
       });
   };

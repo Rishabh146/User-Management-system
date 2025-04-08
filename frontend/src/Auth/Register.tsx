@@ -44,10 +44,12 @@ function Register() {
           navigate('/login');
       })
       .catch((error: AxiosError<{error:string}>) => {
-        toast.error(error?.response?.data?.error || 'Something went wrong');
-
-        if (error.request) {
-          toast.error('Network or server error.');
+        if (error.code === AxiosError.ERR_NETWORK) {
+          toast.error('Network error. Please check your internet connection.');
+        } else {
+          toast.error(
+            error?.response?.data?.error ?? 'Incorrect login credentials.'
+          );
         }
       });
   };
