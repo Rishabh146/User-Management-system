@@ -7,13 +7,11 @@ import { UserInfoType } from '../models/types';
 import { PURGE } from 'redux-persist';
 
 export interface UserState {
-  user: UserInfoType | undefined;
   users: UserInfoType[];
   loading: boolean;
 }
 
 const initialState: UserState = {
-  user: undefined,
   users: [],
   loading: false,
 };
@@ -98,12 +96,11 @@ const usersSlice = createSlice({
       .addCase(PURGE, () => initialState);
   },
   selectors: {
-    selectUser: (s) => s.user,
     selectUsers: (s) => s.users,
     selectLoading: (s) => s.loading,
   },
 });
 
-export const { selectUser, selectUsers, selectLoading } = usersSlice.selectors;
+export const {selectUsers, selectLoading } = usersSlice.selectors;
 
 export default usersSlice.reducer;

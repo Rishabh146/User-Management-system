@@ -1,15 +1,24 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { setUser } from '../Redux/authSlice';
 import { toast } from 'react-hot-toast';
-import { inputstyle, loginBox } from './AuthStyle';
 import { loginUser } from '../services/AuthServices';
 import { AxiosError } from 'axios';
 import { useAppDispatch } from '../Redux/Hooks';
-import theme from '../services/Theme';
+import { setUser } from '../Redux/authSlice';
 import { LoginCredential } from '../models/types';
-import { Box, Button, Input, FormControl, Link, Typography } from '@mui/joy';
+import {
+  Box,
+  Button,
+  Input,
+  FormControl,
+  Link,
+  Typography,
+  CircularProgress,
+  Sheet,
+} from '@mui/joy';
+import theme from '../services/Theme';
 import Layout from '../components/Layout/Layout';
+import { loginsheetStyle } from './AuthStyle';
 
 function Login() {
   const [formData, setFormData] = useState<LoginCredential>({
@@ -18,6 +27,7 @@ function Login() {
   });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -29,6 +39,7 @@ function Login() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    setIsLoading(true);
     loginUser(formData.email, formData.password)
       .then((user) => {
         dispatch(setUser(user));
@@ -43,69 +54,80 @@ function Login() {
             err?.response?.data?.error ?? 'Incorrect login credentials.'
           );
         }
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
   return (
-    <Layout tittle={'Login'}>
+    <Layout tittle={'login'}>
       <Box
         sx={{
+          minHeight: '80vh',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          flexDirection: 'column',
+          px: 2,
         }}
       >
-        <Typography sx={{ textAlign: 'center', m: 2 }}></Typography>
-        <form onSubmit={handleSubmit}>
-          <Box sx={loginBox}>
-            <Typography level="h1" sx={{ textAlign: 'center', pt: 3 }}>
-              Login Here
-            </Typography>
-            <FormControl>
+        <Sheet
+          variant="outlined"
+          sx={loginsheetStyle}
+        >
+          <Typography level="h4" textAlign="center" mb={2}>
+            Login
+          </Typography>
+
+          <form onSubmit={handleSubmit}>
+            <FormControl sx={{ mb: 2 }}>
               <Input
                 name="email"
                 type="email"
                 placeholder="Email"
-                sx={inputstyle}
                 value={formData.email}
                 onChange={handleChange}
                 required
               />
             </FormControl>
-            <FormControl>
+
+            <FormControl sx={{ mb: 2 }}>
               <Input
                 name="password"
                 type="password"
                 placeholder="Password"
-                sx={inputstyle}
                 value={formData.password}
                 onChange={handleChange}
                 required
               />
             </FormControl>
-            <Box>
-              <Button
-                size="lg"
-                type="submit"
-                sx={{ textAlign: 'center', px: 20, m: 2 }}
-              >
-                Login
-              </Button>
-            </Box>
-            <Typography sx={{ textAlign: 'center', m: 1, p: 1 }}>
-              <Box component="span">Don't Have an Account?</Box>
-              <Link
-                component={NavLink}
-                to="/register"
-                underline="none"
-                sx={{ color: theme.vars.palette.primary, p: 1 }}
-              >
-                Register
-              </Link>
-            </Typography>
-          </Box>
-        </form>
+
+            <Button
+              type="submit"
+              fullWidth
+              size="lg"
+              sx={{ mb: 2 }}
+              loading={isLoading}
+              loadingIndicator={
+                <CircularProgress size="sm" sx={{ color: 'white' }} />
+              }
+            >
+              Login
+            </Button>
+          </form>
+
+          <Typography level="body-sm" textAlign="center">
+            Don&apos;t have an account?
+            <Link
+              component={NavLink}
+              to="/register"
+              underline="none"
+              sx={{ ml: 1, color: theme.vars.palette.primary }}
+            >
+              Register
+            </Link>
+          </Typography>
+        </Sheet>
       </Box>
     </Layout>
   );

@@ -1,5 +1,4 @@
 import { Box, Typography } from '@mui/joy';
-import React from 'react';
 
 function Footer() {
   return (
@@ -15,7 +14,7 @@ function Footer() {
         textAlign: 'center',
       }}
     >
-      <Typography level="body-lg" color="neutral" sx={{ pt: 3, pb: 3 }}>
+      <Typography level="body-lg" color="neutral" sx={{ py:2 }}>
         © {new Date().getFullYear()} MyApp. All rights reserved.
       </Typography>
     </Box>

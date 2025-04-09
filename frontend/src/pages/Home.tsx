@@ -69,13 +69,25 @@ function Home() {
       {user ? (
         <div>
           {loading ? (
-            <CircularProgress sx={{ color: theme.vars.palette.primary }} />
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                mt: 2,
+              }}
+            >
+              <CircularProgress
+                size="md"
+                sx={{ color: theme.vars.palette.primary }}
+              />
+            </Box>
           ) : users.length === 0 ? (
             <Typography>No users available.</Typography>
           ) : (
             <Box
               sx={{
-                maxHeight: '78vh',
+                maxHeight: '77vh',
                 overflowY: 'auto',
                 mt: 2,
                 border: '1px solid #ccc',
