@@ -65,11 +65,6 @@ function About() {
       </Typography>
     </Typography>
   );
-
-  if (!user) {
-    return <Typography>No user is logged in.</Typography>;
-  }
-
   return (
     <Layout tittle={'Profile'}>
       <Box sx={{ minHeight: '84vh' }}>
@@ -93,7 +88,7 @@ function About() {
               >
                 <Avatar size="lg" />
                 <Typography level="h3" mt={1}>
-                  {user.name}
+                  {user?.name}
                 </Typography>
                 <Button
                   variant="solid"

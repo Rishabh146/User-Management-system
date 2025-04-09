@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PURGE } from 'redux-persist';
 import { User } from '../models/types';
-import { RootState } from './store';
 import { updateUserProfile } from './usersSlice';
 
 export interface AuthState {
@@ -18,6 +17,9 @@ const authSlice = createSlice({
       state.user = action.payload;
     },
   },
+  selectors:{
+    selectUser: (s) => s.user,
+  },
   extraReducers(builder) {
     builder
       .addCase(PURGE, () => initialState)
@@ -28,6 +30,6 @@ const authSlice = createSlice({
       });
   },
 });
-export const selectUser = (state: RootState) => state.auth.user;
 export const { setUser } = authSlice.actions;
+export const {selectUser}=authSlice.selectors
 export default authSlice.reducer;

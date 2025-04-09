@@ -8,7 +8,14 @@ import { AxiosError } from 'axios';
 import { useAppDispatch } from '../Redux/Hooks';
 import theme from '../services/Theme';
 import { LoginCredential } from '../models/types';
-import { Box, Button, Input, FormControl, Link, Typography } from '@mui/joy';
+import {
+  Box,
+  Button,
+  Input,
+  FormControl,
+  Link,
+  Typography,
+} from '@mui/joy';
 import Layout from '../components/Layout/Layout';
 
 function Login() {
@@ -18,6 +25,7 @@ function Login() {
   });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -29,6 +37,7 @@ function Login() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    setIsLoading(true);
     loginUser(formData.email, formData.password)
       .then((user) => {
         dispatch(setUser(user));
@@ -43,6 +52,9 @@ function Login() {
             err?.response?.data?.error ?? 'Incorrect login credentials.'
           );
         }
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -86,6 +98,7 @@ function Login() {
             </FormControl>
             <Box>
               <Button
+                loading={isLoading}
                 size="lg"
                 type="submit"
                 sx={{ textAlign: 'center', px: 20, m: 2 }}
