@@ -44,7 +44,7 @@ export const registerController = async (req, res) => {
 export const loginController = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).send({ error: 'Invalid email or password' });
+    return res.status(400).send({ error: 'email and password Required' });
   }
   try {
     const user = await userModels.findOne({ email });
@@ -78,11 +78,10 @@ export const loginController = async (req, res) => {
 
 export const updateUserProfileControler = async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
-
   try {
     if (!token) {
       return res.status(401).send({
-        error: 'Unauthorized: No token provided',
+        error: 'Unauthorized User',
       });
     }
     const decoded = JWT.verify(token, process.env.JWT_SECRET);
@@ -100,7 +99,7 @@ export const updateUserProfileControler = async (req, res) => {
       {
         name: name || user.name,
         email: email || user.email,
-        gender: gender || user.gender,
+        gender: gender !== undefined ? gender : user.gender,
         age: age !== undefined ? age : user.age,
       },
       { new: true }
@@ -116,7 +115,13 @@ export const updateUserProfileControler = async (req, res) => {
 };
 
 export const getAllUsersController = async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
   try {
+    if (!token) {
+      return res.status(401).send({
+        error: 'Unauthorized User',
+      });
+    }
     const users = await userModels.find({}, '-password');
     res.status(200).send({
       users,

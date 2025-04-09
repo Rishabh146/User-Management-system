@@ -1,12 +1,18 @@
-import React from 'react'
-import Layout from '../components/Layout/Layout'
-import { Typography, Card, CardContent, Box, Avatar, Divider, Sheet, Button} from '@mui/joy'
+import React from 'react';
+import Layout from '../components/Layout/Layout';
+import {
+  Typography,
+  Card,
+  CardContent,
+  Box,
+  Avatar,
+  Divider,
+  Button,
+} from '@mui/joy';
 import { useState } from 'react';
 import theme from '../services/Theme';
 
-import {
-  Input,
-} from '@mui/joy'; 
+import { Input } from '@mui/joy';
 import { selectUser } from '../Redux/authSlice';
 import { updateUserProfile } from '../Redux/usersSlice';
 import { useAppDispatch, useAppSelector } from '../Redux/Hooks';
@@ -15,7 +21,7 @@ import toast from 'react-hot-toast';
 
 function About() {
   const dispatch = useAppDispatch();
-  const user: User|undefined = useAppSelector(selectUser);
+  const user: User | undefined = useAppSelector(selectUser);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [formData, setFormData] = useState<UpdateProfileType>({
     name: user?.name || '',
@@ -28,20 +34,37 @@ function About() {
   };
 
   const handleUpdate = async (): Promise<void> => {
-    if (!formData.name.trim()) {
-      toast.error('Name cannot be empty');
-      return;
-    }
-    dispatch(updateUserProfile({ profileData: formData }))
-      .then((resultAction) => {
+    dispatch(updateUserProfile({ profileData: formData })).then(
+      (resultAction) => {
         if (resultAction.meta.requestStatus === 'fulfilled') {
-          toast.success("Profile updated successfully")
+          toast.success('Profile updated successfully');
           setEditMode(false);
         } else {
-          toast.error("update failed")
+          toast.error('update failed');
         }
-      });
+      }
+    );
   };
+
+  const renderProfileField = (
+    label: string,
+    value: string | number | undefined
+  ) => (
+    <Typography
+      key={label}
+      level="body-md"
+      sx={{ color: theme.vars.palette.primary, mt: 1 }}
+    >
+      <strong>{label}:</strong>{' '}
+      <Typography
+        level="body-md"
+        display="inline"
+        sx={{ color: theme.vars.palette.primary }}
+      >
+        {value || '-'}
+      </Typography>
+    </Typography>
+  );
 
   if (!user) {
     return <Typography>No user is logged in.</Typography>;
@@ -55,93 +78,90 @@ function About() {
         </Typography>
 
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
-          <Card variant="outlined" sx={{ width: 400, borderRadius: 'md', boxShadow: 'lg' }}>
+          <Card
+            variant="outlined"
+            sx={{ width: 400, borderRadius: 'md', boxShadow: 'lg' }}
+          >
             <CardContent>
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 2 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  mb: 2,
+                }}
+              >
                 <Avatar size="lg" />
                 <Typography level="h3" mt={1}>
                   {user.name}
                 </Typography>
-                <Button variant="solid" sx={{ mt: 1 }} onClick={() => setEditMode(!editMode)}>
+                <Button
+                  variant="solid"
+                  sx={{ mt: 1 }}
+                  onClick={() => setEditMode(!editMode)}
+                >
                   {editMode ? 'Cancel' : 'Edit Profile'}
                 </Button>
               </Box>
 
               <Divider />
-
-              <Sheet sx={{ mt: 2, px: 1 }}>
-                {editMode ? (
-                  <>
-                    <Input
-                      fullWidth
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="Name"
-                      sx={{ mt: 1 }}
-                    />
-                    <Input
-                      fullWidth
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="Email"
-                      sx={{ mt: 1 }}
-                      disabled
-                    />
-                    <Input
-                      fullWidth
-                      name="age"
-                      value={formData.age}
-                      onChange={handleChange}
-                      placeholder="Age"
-                      sx={{ mt: 1 }}
-                    />
-                    <Input
-                      fullWidth
-                      name="gender"
-                      value={formData.gender}
-                      onChange={handleChange}
-                      placeholder="Gender"
-                      sx={{ mt: 1 }}
-                    />
-                    <Button
-                      variant="solid"
-                      sx={{ mt: 2, color: theme.vars.palette.primary }}
-                      onClick={handleUpdate}
-                    >
-                      Save Changes
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Typography level="body-md" sx={{ color: theme.vars.palette.primary, mt:1}}>
-                      <strong>Name:</strong>{' '}
-                      <Typography sx={{ color: theme.vars.palette.primary}} level="body-md" display="inline">
-                        {user?.name}
-                      </Typography>
-                    </Typography>
-                    <Typography level="body-md" sx={{ color: theme.vars.palette.primary, mt:1}}>
-                      <strong>Email:</strong>{' '}
-                      <Typography sx={{ color: theme.vars.palette.primary}} level="body-md" display="inline">
-                        {user?.email}
-                      </Typography>
-                    </Typography>
-                    <Typography level="body-md" sx={{ color: theme.vars.palette.primary, mt:1}}>
-                      <strong>Age:</strong>{' '}
-                      <Typography sx={{ color: theme.vars.palette.primary}} level="body-md" display="inline">
-                        {user?.age}
-                      </Typography>
-                    </Typography>
-                    <Typography level="body-md" sx={{ color: theme.vars.palette.primary, mt:1}}>
-                      <strong>Gender:</strong>{' '}
-                      <Typography sx={{ color: theme.vars.palette.primary}} level="body-md" display="inline">
-                        {user?.gender}
-                      </Typography>
-                    </Typography>
-                  </>
-                )}
-              </Sheet>
+              {editMode ? (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleUpdate();
+                  }}
+                >
+                  <Input
+                    fullWidth
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Name"
+                    sx={{ mt: 1 }}
+                    required
+                  />
+                  <Input
+                    fullWidth
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Email"
+                    sx={{ mt: 1 }}
+                    disabled
+                  />
+                  <Input
+                    fullWidth
+                    name="age"
+                    value={formData.age}
+                    onChange={handleChange}
+                    placeholder="Age"
+                    sx={{ mt: 1 }}
+                  />
+                  <Input
+                    fullWidth
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    placeholder="Gender"
+                    sx={{ mt: 1 }}
+                  />
+                  <Button
+                    variant="solid"
+                    sx={{ mt: 2, color: theme.vars.palette.primary }}
+                    type="submit"
+                  >
+                    Save Changes
+                  </Button>
+                </form>
+              ) : (
+                <>
+                  {renderProfileField('Name', user?.name)}
+                  {renderProfileField('Email', user?.email)}
+                  {renderProfileField('Age', user?.age)}
+                  {renderProfileField('Gender', user?.gender)}
+                </>
+              )}
             </CardContent>
           </Card>
         </Box>
