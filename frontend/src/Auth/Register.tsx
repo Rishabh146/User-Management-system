@@ -1,24 +1,22 @@
 import Layout from '../components/Layout/Layout';
 import { FormEvent, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { NavLink } from 'react-router-dom';
-import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { registerUser } from '../services/AuthServices';
-import { inputstyle, Item, registerBox, RegisterGrid } from './AuthStyle';
-import RegisterPageImage from '../assets/images';
 import { AxiosError } from 'axios';
 import theme from '../services/Theme';
 import { FormDataType } from '../models/types';
+import RegisterPageImage from '../assets/images';
 import {
   Box,
   Button,
-  Grid,
   Input,
   FormControl,
   Link,
   Typography,
+  Sheet,
 } from '@mui/joy';
+import { registersheetStyle } from './AuthStyle';
 
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&[\]{}^+_#])([A-Za-z\d@$!%*?&[\]{}^+_#]{8,})$/;
@@ -70,135 +68,124 @@ function Register() {
   };
 
   return (
-    <Layout tittle={'Register'}>
-        <div>
-          <form onSubmit={handleSubmit}>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                minHeight: '85vh',
-                px: 2,
-              }}
-            >
-              <Grid container spacing={2} columns={16} sx={RegisterGrid}>
-                <Grid xs={8}>
-                  <Item>
-                    <Box sx={registerBox}>
-                      <Typography
-                        level="h1"
-                        sx={{
-                          textAlign: 'center',
-                          color: theme.vars.palette.primary,
-                        }}
-                      >
-                        Sign Up Here
-                      </Typography>
-                      <FormControl>
-                        <Input
-                          name="name"
-                          type="text"
-                          placeholder="Name"
-                          sx={inputstyle}
-                          value={formData.name}
-                          onChange={handleChange}
-                          required
-                        />
-                      </FormControl>
-                      <FormControl>
-                        <Input
-                          name="email"
-                          type="email"
-                          placeholder="Email"
-                          sx={inputstyle}
-                          value={formData.email}
-                          onChange={handleChange}
-                          required
-                        />
-                      </FormControl>
-                      <FormControl>
-                        <Input
-                          placeholder="Password"
-                          sx={inputstyle}
-                          name="password"
-                          type="password"
-                          value={formData.password}
-                          onChange={handleChange}
-                          required
-                        />
-                        {showPasswordHint && (
-                          <Typography
-                            sx={{
-                              color: theme.vars.palette.danger[600],
-                              display: 'inline',
-                              ml: 2,
-                              pl: 1,
-                            }}
-                          >
-                            Enter Strong Password
-                          </Typography>
-                        )}
-                      </FormControl>
-                      <FormControl>
-                        <Input
-                          name="gender"
-                          placeholder="Gender"
-                          sx={inputstyle}
-                          value={formData.gender}
-                          onChange={handleChange}
-                        />
-                      </FormControl>
-                      <FormControl>
-                        <Input
-                          placeholder="Age"
-                          sx={inputstyle}
-                          name="age"
-                          type="number"
-                          value={formData.age}
-                          onChange={handleChange}
-                        />
-                      </FormControl>
-
-                      <Box>
-                        <Button
-                          loading={isLoading}
-                          size="md"
-                          sx={{ textAlign: 'center', px: 25, m: 2, py: 2 }}
-                          type="submit"
-                          disabled={!passwordRegex.test(formData.password)}
-                        >
-                          Sign UP
-                        </Button>
-                      </Box>
-                      <Typography sx={{ textAlign: 'center', m: 1, p: 1 }}>
-                        <Box
-                          component="span"
-                          sx={{ color: theme.vars.palette.primary }}
-                        >
-                          Already Have an Account?
-                        </Box>
-                        <Link
-                          component={NavLink}
-                          to="/login"
-                          underline="none"
-                          sx={{ color: theme.vars.palette.primary[600], p: 1 }}
-                        >
-                          Login
-                        </Link>
-                      </Typography>
-                    </Box>
-                  </Item>
-                </Grid>
-                <Grid xs={8}>
-                  <Item>
-                    <RegisterPageImage />
-                  </Item>
-                </Grid>
-              </Grid>
-            </Box>
-          </form>
-        </div>
+    <Layout tittle="Register">
+      <Box
+        sx={{
+          minHeight: '75vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          px: 2,
+          py: 4,
+        }}
+      >
+        <Sheet
+          variant="outlined"
+          sx={registersheetStyle}
+        >
+          <Box
+            sx={{
+              flex: 1,
+              p: { xs: 3, sm: 4 },
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography level="h4" textAlign="center" mb={2}>
+              Sign Up
+            </Typography>
+            <form onSubmit={handleSubmit}>
+              <FormControl sx={{ mb: 2 }}>
+                <Input
+                  name="name"
+                  placeholder="Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </FormControl>
+              <FormControl sx={{ mb: 2 }}>
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </FormControl>
+              <FormControl sx={{ mb: 2 }}>
+                <Input
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+                {showPasswordHint && (
+                  <Typography
+                    level="body-xs"
+                    sx={{ color: theme.vars.palette.danger[600], mt: 1 }}
+                  >
+                    Password must be 8+ chars, with upper/lowercase, number &
+                    symbol.
+                  </Typography>
+                )}
+              </FormControl>
+              <FormControl sx={{ mb: 2 }}>
+                <Input
+                  name="gender"
+                  placeholder="Gender"
+                  value={formData.gender}
+                  onChange={handleChange}
+                />
+              </FormControl>
+              <FormControl sx={{ mb: 3 }}>
+                <Input
+                  name="age"
+                  type="number"
+                  placeholder="Age"
+                  value={formData.age}
+                  onChange={handleChange}
+                />
+              </FormControl>
+              <Button
+                type="submit"
+                fullWidth
+                loading={isLoading}
+                disabled={!passwordRegex.test(formData.password)}
+              >
+                Sign Up
+              </Button>
+            </form>
+            <Typography level="body-sm" textAlign="center" mt={2}>
+              Already have an account?
+              <Link
+                component={NavLink}
+                to="/login"
+                underline="none"
+                sx={{ ml: 1, color: theme.vars.palette.primary[600] }}
+              >
+                Login
+              </Link>
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              flex: 1,
+              display: { xs: 'none', md: 'flex' },
+              alignItems: 'center',
+              justifyContent: 'center',
+              bgcolor: 'background.level1',
+              p: 3,
+            }}
+          >
+            <RegisterPageImage />
+          </Box>
+        </Sheet>
+      </Box>
     </Layout>
   );
 }

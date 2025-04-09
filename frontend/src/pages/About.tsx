@@ -18,6 +18,23 @@ import { updateUserProfile } from '../Redux/usersSlice';
 import { useAppDispatch, useAppSelector } from '../Redux/Hooks';
 import { UpdateProfileType, User } from '../models/types';
 import toast from 'react-hot-toast';
+type ProfileFieldProps = {
+  label: string;
+  value: string | number | undefined;
+};
+
+const ProfileField: React.FC<ProfileFieldProps> = ({ label, value }) => (
+  <Typography level="body-md" sx={{ color: theme.vars.palette.primary, mt: 1 }}>
+    <strong>{label}:</strong>{' '}
+    <Typography
+      level="body-md"
+      display="inline"
+      sx={{ color: theme.vars.palette.primary }}
+    >
+      {value || '-'}
+    </Typography>
+  </Typography>
+);
 
 function About() {
   const dispatch = useAppDispatch();
@@ -46,28 +63,9 @@ function About() {
     );
   };
 
-  const renderProfileField = (
-    label: string,
-    value: string | number | undefined
-  ) => (
-    <Typography
-      key={label}
-      level="body-md"
-      sx={{ color: theme.vars.palette.primary, mt: 1 }}
-    >
-      <strong>{label}:</strong>{' '}
-      <Typography
-        level="body-md"
-        display="inline"
-        sx={{ color: theme.vars.palette.primary }}
-      >
-        {value || '-'}
-      </Typography>
-    </Typography>
-  );
   return (
     <Layout tittle={'Profile'}>
-      <Box sx={{ minHeight: '84vh' }}>
+      <Box>
         <Typography level="h2" sx={{ textAlign: 'center', my: 2 }}>
           Welcome {user?.name}
         </Typography>
@@ -151,10 +149,10 @@ function About() {
                 </form>
               ) : (
                 <>
-                  {renderProfileField('Name', user?.name)}
-                  {renderProfileField('Email', user?.email)}
-                  {renderProfileField('Age', user?.age)}
-                  {renderProfileField('Gender', user?.gender)}
+                  <ProfileField label="Name" value={user?.name} />
+                  <ProfileField label="Email" value={user?.email} />
+                  <ProfileField label="Age" value={user?.age} />
+                  <ProfileField label="Gender" value={user?.gender} />
                 </>
               )}
             </CardContent>

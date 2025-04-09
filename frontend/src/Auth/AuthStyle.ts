@@ -1,38 +1,24 @@
 import { Sheet, styled } from '@mui/joy';
-export const inputstyle = {
-  m: 2,
-  p: 1,
-  borderLeft: 'none',
-  borderRight: 'none',
-  borderTop: 'none',
-};
-
-export const loginBox = {
-  maxHeight: 500,
-  maxWidth: 400,
-  mt: 30,
-  boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.3)',
-  borderRadius: 4,
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  flexDirection: 'column',
-};
-
-export const registerBox = {
+export const loginsheetStyle={
   width: '100%',
+  maxWidth: 400,
+  mx: 'auto',
+  p: 4,
+  borderRadius: 'lg',
+  boxShadow: 'md',
+  bgcolor: 'background.surface', 
+}
+export const registersheetStyle={
+  width: '100%',
+  maxWidth: 900,
+  mx: 'auto',
   display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-};
-export const RegisterGrid = {
-  flexGrow: 1,
-  maxWidth: 1100,
-  boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
-  borderRadius: 3,
-  p: 3,
+  flexDirection: { xs: 'column', md: 'row' },
+  borderRadius: 'lg',
+  boxShadow: 'md',
   bgcolor: 'background.surface',
-};
+  overflow: 'hidden',
+}
 
 export const Item = styled(Sheet)(({ theme }) => ({
   backgroundColor: theme.palette.background.surface,

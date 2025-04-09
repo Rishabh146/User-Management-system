@@ -11,26 +11,36 @@ type LayoutProps = {
 
 function Layout({ children, tittle }: LayoutProps) {
   return (
-    <>
-      <Toaster
-        position="top-center"
-        containerStyle={{
-          top: 20,
-          left: 20,
-          bottom: 20,
-          right: 20,
-        }}
-      />
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>{tittle}</title>
-      </Helmet>
-      <Header />
-      <Box component="main" sx={{ minHeight: '86vh' }}>
-        {children}
-      </Box>
-      <Footer />
-    </>
+<Box
+  sx={{
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100vh',
+  }}
+>
+  <Toaster
+    position="top-center"
+    containerStyle={{
+      top: 20,
+      left: 20,
+      bottom: 20,
+      right: 20,
+    }}
+  />
+
+  <Helmet>
+    <meta charSet="utf-8" />
+    <title>{tittle}</title>
+  </Helmet>
+
+  <Header />
+
+  <Box component="main" sx={{ flex: 1 }}>
+    {children}
+  </Box>
+
+  <Footer />
+</Box>
   );
 }
 

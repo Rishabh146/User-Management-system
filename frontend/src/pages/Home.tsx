@@ -87,7 +87,7 @@ function Home() {
           ) : (
             <Box
               sx={{
-                maxHeight: '78vh',
+                maxHeight: '77vh',
                 overflowY: 'auto',
                 mt: 2,
                 border: '1px solid #ccc',
