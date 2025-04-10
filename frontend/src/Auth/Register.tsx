@@ -30,8 +30,6 @@ function Register() {
     name: '',
     email: '',
     password: '',
-    gender: '',
-    age: 0,
   });
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {

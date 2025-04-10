@@ -43,8 +43,6 @@ function About() {
   const [formData, setFormData] = useState<UpdateProfileType>({
     name: user?.name || '',
     email: user?.email || '',
-    age: user?.age,
-    gender: user?.gender || '',
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

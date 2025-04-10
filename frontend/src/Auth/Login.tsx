@@ -108,16 +108,13 @@ function Login() {
               size="lg"
               sx={{ mb: 2 }}
               loading={isLoading}
-              loadingIndicator={
-                <CircularProgress size="sm" sx={{ color: 'white' }} />
-              }
             >
               Login
             </Button>
           </form>
 
           <Typography level="body-sm" textAlign="center">
-            Don&apos;t have an account?
+            Don't have an account?
             <Link
               component={NavLink}
               to="/register"

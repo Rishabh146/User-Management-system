@@ -1,9 +1,11 @@
 export interface BaseUser {
   name: string;
   email: string;
-  age: number;
-  gender: string;
+  age?: number;
+  gender?: string; 
 }
+
+// redefine the interface
 
 export interface LoginCredential {
   email: string;
@@ -22,7 +24,7 @@ export interface User extends BaseUser {
 export interface UpdateProfileType extends Partial<Pick<BaseUser, 'age'>> {
   name: string;
   email: string;
-  gender: string;
+  gender?: string;
 }
 
 export interface RegisterUser extends BaseUser {
