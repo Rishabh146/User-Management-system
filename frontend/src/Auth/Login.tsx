@@ -13,7 +13,6 @@ import {
   FormControl,
   Link,
   Typography,
-  CircularProgress,
   Sheet,
 } from '@mui/joy';
 import theme from '../services/Theme';
