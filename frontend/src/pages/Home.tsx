@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import Layout from '../components/Layout/Layout';
 import { fetchUsers } from '../Redux/usersSlice';
 import { selectUsers, selectLoading } from '../Redux/usersSlice';
